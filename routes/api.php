@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FilterController;
 use App\Http\Controllers\Api\ProductController;
@@ -36,3 +37,12 @@ Route::get('products/{product}', [ProductController::class, 'getProduct']);
 
 //выдает список фильтров. На вход может принимать параметр category_id
 Route::get('filters', [FilterController::class, 'getFiltersList']);
+
+//отправить код авторизации в звонке
+Route::post('voice-password/send/{phone}', [AuthController::class, 'sendVoicePasswordCode'])
+    ->middleware('throttle:voice-password');
+
+//проверить код и залогинить/зарегать
+Route::post('voice-password/check/{phone}/{code}', [AuthController::class, 'checkVoicePasswordCode'])
+    ->middleware('throttle:voice-password-check');
+

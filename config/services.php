@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'voicePassword' => [
+        'url' => env('VOICE_PASSWORD_URL'),
+        'apiKey' => env('VOICE_PASSWORD_API_KEY')
+    ],
+
 ];

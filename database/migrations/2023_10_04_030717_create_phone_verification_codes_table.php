@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('phone_verification_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('phone', 11)->unique();
-            $table->string('email')->unique()->nullable();
-            $table->rememberToken();
+            $table->string('phone', 11);
+            $table->string('code');
+            $table->timestamp('expires_at');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('phone_verification_codes');
     }
 };

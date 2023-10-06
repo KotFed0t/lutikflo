@@ -29,10 +29,10 @@ class DatabaseSeeder extends Seeder
         Flower::factory(7)->create();
         Category::factory(8)->create();
         Product::factory(50)->create();
-        Image::factory(100)->create();
+        Image::factory(30)->create();
 
         $flower_product_rows = [];
-        foreach (range(1, 80) as $index) {
+        foreach (range(1, 50) as $index) {
             $flower_product_rows[] = [
                 'flower_id' => rand(1, 7),
                 'product_id' => rand(1, 50),
