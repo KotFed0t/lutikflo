@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FilterController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,4 +46,7 @@ Route::post('voice-password/send/{phone}', [AuthController::class, 'sendVoicePas
 //проверить код и залогинить/зарегать
 Route::post('voice-password/check/{phone}/{code}', [AuthController::class, 'checkVoicePasswordCode'])
     ->middleware('throttle:voice-password-check');
+
+//высчитать стоимость доставки по длине маршрута. В параметрах принимает {altitude} и {longitude} точки назначения
+Route::get('delivery-price', [OrderController::class, 'getDeliveryPrice']);
 

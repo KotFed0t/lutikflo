@@ -37,8 +37,8 @@ services:
     working_dir: /var/www/lutikflo
     volumes:
       - ./:/var/www/lutikflo
-#    entrypoint: ["sh", "-c", "npm install && npm run dev -- --host"]
-    entrypoint: ["sh", "-c", "npm install && rm ./public/hot && npm run build"]  #- для прода
+    entrypoint: ["sh", "-c", "npm install && npm run dev -- --host"]
+#    entrypoint: ["sh", "-c", "npm install && rm ./public/hot && npm run build"]  #- для прода
 
   mysql:
     image: mysql:8.0

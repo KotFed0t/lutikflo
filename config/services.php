@@ -36,4 +36,8 @@ return [
         'apiKey' => env('VOICE_PASSWORD_API_KEY')
     ],
 
+    'tomtom' => [
+        'apiKey' => env('TOMTOM_API_KEY')
+    ]
+
 ];
