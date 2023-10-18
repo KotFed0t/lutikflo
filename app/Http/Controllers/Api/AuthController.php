@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PhoneVerirficationCodeCheckRequest;
 use App\Http\Requests\PhoneVerirficationCodeSendRequest;
+use App\Models\User;
 use App\Services\AuthService;
 use App\Services\VoicePasswordService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthController extends Controller
@@ -35,5 +37,12 @@ class AuthController extends Controller
         } catch (ModelNotFoundException $exception) {
             return response()->json(['status' => 'error', 'message' => 'введен неверный код'], 401);
         }
+    }
+
+    public function test()
+    {
+        $user = User::where('phone', '79137098882')->first();
+        Auth::login($user);
+        return response()->json(['status' => 'success', 'user' => $user]);
     }
 }

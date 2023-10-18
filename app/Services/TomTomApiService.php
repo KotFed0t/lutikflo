@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\DeliveryPriceSetting;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -20,7 +21,7 @@ class TomTomApiService
         $this->apiKey = config('services.tomtom.apiKey');
     }
 
-    public function getRouteDistanceKm($destination_lat, $destination_long)
+    public function getRouteDistanceKm($destination_lat, $destination_long): ?float
     {
         $url = self::TOMTOM_URL . self::SHOP_LATITUDE . ',' . self::SHOP_LONGITUDE . ':' . $destination_lat . ',' . $destination_long . '/json';
         $response = Http::get($url, ['key' => $this->apiKey]);
@@ -29,6 +30,21 @@ class TomTomApiService
             return round($meters / 1000);
         }
         Log::error('error while calling TomTom.com', ['requested_url' => $url, 'response' => $response->json()]);
+        return null;
+    }
+
+    public function getDeliveryPrice($destination_lat, $destination_long): ?int
+    {
+        $distance = $this->getRouteDistanceKm($destination_lat, $destination_long);
+        if ($distance !== null) {
+            $deliveryPriceSettings = DeliveryPriceSetting::first();
+            if ($distance <= $deliveryPriceSettings->fix_price_distance_km) {
+                return $deliveryPriceSettings->fix_price;
+            }
+            return ($distance - $deliveryPriceSettings->fix_price_distance_km)
+                * $deliveryPriceSettings->price_per_one_km
+                + $deliveryPriceSettings->fix_price;
+        }
         return null;
     }
 }

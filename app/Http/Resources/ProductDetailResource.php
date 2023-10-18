@@ -20,12 +20,14 @@ class ProductDetailResource extends JsonResource
             'slug' => $this->slug,
             'category_id' => $this->category_id,
             'price' => $this->price,
+            'is_active' => $this->is_active,
+            'is_changeable_flower_count' => $this->isChangeableFlowerCount(),
+            'changeable_flower_info' => new FlowerResource($this->getChangeableFlower()),
             'description' => $this->description,
             'main_img' => $this->main_img,
             'images' => ImageResource::collection($this->images()->orderBy('order', 'DESC')->get()),
-            'monobuquiet' => $this->when($this->flowers()->count() === 1, function () {
-                return new FlowerResource($this->flowers->first());
-            }),
+            'flowers' => FlowerResource::collection($this->flowers),
+            'packages' => PackageResource::collection($this->packages)
         ];
     }
 }

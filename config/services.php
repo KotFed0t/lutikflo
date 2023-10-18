@@ -38,6 +38,11 @@ return [
 
     'tomtom' => [
         'apiKey' => env('TOMTOM_API_KEY')
+    ],
+
+    'yookassa' => [
+        'apiKey' => env('YOOKASSA_API_KEY'),
+        'shopId' => env('YOOKASSA_SHOP_ID')
     ]
 
 ];

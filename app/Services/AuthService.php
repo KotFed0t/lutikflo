@@ -9,7 +9,7 @@ class AuthService
 {
     public function loginOrRegister($phone)
     {
-        $user = User::where('phone')->first();
+        $user = User::where('phone', $phone)->first();
         if ($user)
             $this->login($user);
         else

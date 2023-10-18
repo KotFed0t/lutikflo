@@ -2,6 +2,7 @@ import Home from "../pages/Home.vue";
 import Login from "../pages/Login.vue";
 import Registration from "../pages/Registration.vue";
 import Addresses from "../pages/Addresses.vue";
+import Order from "../pages/Order.vue";
 
 const routes = [
     {
@@ -23,6 +24,11 @@ const routes = [
         path: '/addresses',
         component: Addresses,
         name: 'addresses'
+    },
+    {
+        path: '/order',
+        component: Order,
+        name: 'order'
     },
 ]
 

@@ -20,7 +20,6 @@ class DeliveryPriceSetting extends Model
         if ($distance <= $this->fix_price_distance_km) {
             return $this->fix_price;
         }
-
         return ($distance - $this->fix_price_distance_km) * $this->price_per_one_km + $this->fix_price;
     }
 }

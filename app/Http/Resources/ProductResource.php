@@ -21,6 +21,7 @@ class ProductResource extends JsonResource
             'category_id' => $this->category_id,
             'price' => $this->price,
             'description' => $this->description,
+            'is_changeable_flower_count' => $this->isChangeableFlowerCount(),
             'main_img' => $this->main_img,
             'order' => $this->order,
             'created_at' => $this->created_at,

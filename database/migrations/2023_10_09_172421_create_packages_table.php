@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('flower_types', function (Blueprint $table) {
+        Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50);
-            $table->boolean('show_in_filters')->default(true);
+            $table->string('name');
+            $table->integer('price');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('flower_types');
+        Schema::dropIfExists('packages');
     }
 };

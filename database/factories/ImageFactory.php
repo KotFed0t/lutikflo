@@ -19,7 +19,7 @@ class ImageFactory extends Factory
     {
         return [
             'image' => fake()->image(),
-            'product_id' => rand(1, 50),
+            'product_id' => rand(1, 30),
             'order' => fake()->randomDigit()
         ];
     }

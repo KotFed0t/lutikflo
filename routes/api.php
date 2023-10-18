@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('login', [AuthController::class, 'test']);
+
 //просто вывод категорий для меню
 Route::get('categories', [CategoryController::class, 'index']);
 
@@ -47,6 +49,9 @@ Route::post('voice-password/send/{phone}', [AuthController::class, 'sendVoicePas
 Route::post('voice-password/check/{phone}/{code}', [AuthController::class, 'checkVoicePasswordCode'])
     ->middleware('throttle:voice-password-check');
 
-//высчитать стоимость доставки по длине маршрута. В параметрах принимает {altitude} и {longitude} точки назначения
+//высчитать стоимость доставки по длине маршрута. В параметрах принимает {latitude} и {longitude} точки назначения
 Route::get('delivery-price', [OrderController::class, 'getDeliveryPrice']);
+
+
+Route::middleware('auth:sanctum')->post('order', [OrderController::class, 'createOrder']);
 

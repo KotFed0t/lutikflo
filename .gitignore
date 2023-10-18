@@ -21,3 +21,4 @@ yarn-error.log
 /public/vendor/
 /app/Providers/TelescopeServiceProvider.php
 /config/telescope.php
+/app/psysh/

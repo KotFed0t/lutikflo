@@ -21,7 +21,7 @@ class ProductFactory extends Factory
             'name' => fake()->word(),
             'slug' => fake()->word().'-'.rand(1, 50),
             'category_id' => rand(1, 8),
-            'price' => fake()->randomNumber(),
+            'price' => rand(500, 5000),
             'is_active' => fake()->boolean(),
             'description' => fake()->text(),
             'main_img' => fake()->image(),

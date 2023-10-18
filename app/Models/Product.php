@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
@@ -26,17 +27,40 @@ class Product extends Model
 
     public function flowers(): BelongsToMany
     {
-        return $this->belongsToMany(Flower::class)->withPivot('count');
+        return $this->belongsToMany(Flower::class)->withPivot(['count', 'is_changeable_flower_count']);
     }
 
-    public function images()
+    public function isChangeableFlowerCount(): bool
+    {
+        $flowers = $this->flowers;
+        if ($flowers->count() === 1 && $flowers->first()->pivot->is_changeable_flower_count) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getChangeableFlower() : Flower|null
+    {
+        if ($this->isChangeableFlowerCount())
+        {
+            return $this->flowers->first();
+        }
+        return null;
+    }
+
+    public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }
 
+    public function packages(): BelongsToMany
+    {
+        return $this->belongsToMany(Package::class)->withPivot('count');
+    }
+
     public static function filter(Request $request)
     {
-        $query = Product::where('is_active', 1);
+        $query = Product::with('flowers')->where('is_active', 1);
 
         if ($request->has('category_id')) {
             $query->where('category_id', $request->get('category_id'));

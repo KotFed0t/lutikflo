@@ -19,6 +19,7 @@ class ProductController extends Controller
 
     public function getProduct(Product $product)
     {
+        //если is_active = false на фронте все равно открыть продукт, но написать что он пока не в наличии
         return new ProductDetailResource($product);
     }
 }
