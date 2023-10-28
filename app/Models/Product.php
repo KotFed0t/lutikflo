@@ -4,15 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use MoonShine\Traits\Models\HasMoonShineChangeLog;
 use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Product extends Model
 {
     use HasFactory;
     use HasEagerLimit;
+    use HasMoonShineChangeLog;
 
     protected $fillable = [
         'name',
@@ -28,6 +31,11 @@ class Product extends Model
     public function flowers(): BelongsToMany
     {
         return $this->belongsToMany(Flower::class)->withPivot(['count', 'is_changeable_flower_count']);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function isChangeableFlowerCount(): bool

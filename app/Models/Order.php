@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use MoonShine\Traits\Models\HasMoonShineChangeLog;
 
 class Order extends Model
 {
     use HasFactory;
+    use HasMoonShineChangeLog;
 
     protected $fillable = [
         'user_id',
@@ -39,7 +41,12 @@ class Order extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class)->withPivot(['product_count', 'flower_count', 'price']);
+        return $this->belongsToMany(Product::class)->withPivot([
+            'product_count',
+            'flower_count',
+            'price_by_one_product',
+            'price_by_count_product'
+        ]);
     }
 
     public function user(): BelongsTo

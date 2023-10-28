@@ -23,36 +23,34 @@ class OrderController extends Controller
 {
     public function getDeliveryPrice(Request $request, TomTomApiService $tomTomApiService)
     {
-        $distance = $tomTomApiService->getRouteDistanceKm($request->get('latitude'), $request->get('longitude'));
-        if ($distance !== null) {
-            $deliveryPriceSettings = DeliveryPriceSetting::first();
-            $deliveryPrice = $deliveryPriceSettings->getPriceByDistance($distance);
-            return response()->json(['price' => $deliveryPrice, 'distance' => $distance]);
+        $deliveryPrice = $tomTomApiService->getDeliveryPrice($request->get('latitude'), $request->get('longitude'));
+        if ($deliveryPrice === null) {
+            return response()->json(['error_message' => 'Не удалось вычислить цену доставки, попробуйте ввести адрес еще раз.'], 500);
         }
-        return response()->json(['error_message' => 'Что-то пошло не так...'], 500);
+        return response()->json(['price' => $deliveryPrice]);
     }
 
-    public function getTest()
+    public function getUserOrders()
     {
-        $order = Order::create([
-            'user_id' => 1,
-            'delivery_address' => 'Пушкина, дом Щшотарки 5',
-            'delivery_date_time' => '2023-10-12 11:12:00',
-            'total_price' => 1000,
-            'delivery_price' => 500,
-            'status' => 3
-        ]);
-//        $order = Order::find(4);
-//        return $order->delivery_date_time;
-//        return $order;
+        //TODO создать Resource
+        return auth()->user()->orders;
+    }
+
+    public function getUserOrderDetails($id)
+    {
+        //TODO создать Resource
+        $order = auth()->user()->orders->find($id);
+        if ($order !== null) {
+            return $order->products;
+        }
+        return response()->json(['error_message' => 'Заказ не найден'], 404);
     }
 
     public function createOrder(OrderCreateRequest $request, TomTomApiService $tomTomApiService, YookassaService $yookassaService)
     {
-        //TODO подчистить метод контроллера getDeliveryPrice
         //TODO TomTomApiService бросать exception или так и отдавать null?
         //TODO настроить логирование с привязкой к номеру или id какому-нибудь
-        $cart_data = $request->validated()['cart'];
+        $cartData = $request->validated()['cart'];
         $formData = $request->validated()['form_data'];
         $user = auth()->user();
         $orderService = null;
@@ -68,7 +66,7 @@ class OrderController extends Controller
         }
 
         try {
-            $orderService = new OrderService($cart_data);
+            $orderService = new OrderService($cartData);
             $orderData = $orderService->getOrderData($deliveryPrice);
         } catch (ModelNotFoundException $e) {
             return response()->json([

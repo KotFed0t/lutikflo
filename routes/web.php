@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Moonshine\DeliveryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('{page}', function () {
     return view('app');
-})->where('page', '.*');
+})->where('page', '^(?!admin).*');

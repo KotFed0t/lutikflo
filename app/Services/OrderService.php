@@ -28,6 +28,11 @@ class OrderService
         $this->cart = $this->validateCart($cart);
     }
 
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
     private function validateCart(array $cart): array
     {
         $inactiveProducts = $this->products->where('is_active', 0);
@@ -168,5 +173,28 @@ class OrderService
             return $item;
         }, $orderData['productsWithPrice']);
         DB::table('order_product')->insert($orderProduct);
+    }
+
+    public function getCartFullData(): array
+    {
+        $products = $this->products;
+        return array_map(function ($cartItem) use ($products) {
+            $product = $products->find($cartItem['product_id']);
+            $changeableFlower = $product->getChangeableFlower();
+            $cartItem['product'] = [
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'category_id' => $product->category_id,
+                'price' => $product->price,
+                'main_img' => $product->main_img
+            ];
+            if ($changeableFlower !== null) {
+                $cartItem['flower'] = [
+                    'price' => $changeableFlower->price,
+                    'min_count' => $changeableFlower->pivot->count
+                ];
+            }
+            return $cartItem;
+        }, $this->cart);
     }
 }

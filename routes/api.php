@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FilterController;
 use App\Http\Controllers\Api\OrderController;
@@ -52,6 +53,16 @@ Route::post('voice-password/check/{phone}/{code}', [AuthController::class, 'chec
 //высчитать стоимость доставки по длине маршрута. В параметрах принимает {latitude} и {longitude} точки назначения
 Route::get('delivery-price', [OrderController::class, 'getDeliveryPrice']);
 
+//создание заказа принимает в параметрах {cart} и {form_data}
+Route::middleware('auth:sanctum')->post('orders', [OrderController::class, 'createOrder']);
 
-Route::middleware('auth:sanctum')->post('order', [OrderController::class, 'createOrder']);
+//заказы пользователя
+Route::middleware('auth:sanctum')->get('orders', [OrderController::class, 'getUserOrders']);
+
+//заказ пользователя детально
+Route::middleware('auth:sanctum')->get('orders/{id}', [OrderController::class, 'getUserOrderDetails']);
+
+//провалидировать корзину и получить всю инфу по корзине. Принимает в параметрах {cart}
+//TODO потом поменять на get?
+Route::post('cart', [CartController::class, 'getCartData']);
 

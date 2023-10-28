@@ -13,6 +13,8 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use MoonShine\Models\MoonshineUser;
+use MoonShine\Models\MoonshineUserRole;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,6 +29,8 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        MoonshineUserRole::query()->create(['name' => 'Worker']);
 
         FlowerType::factory(5)->create();
         Flower::factory(7)->create();
