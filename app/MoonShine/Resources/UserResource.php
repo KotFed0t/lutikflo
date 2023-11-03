@@ -7,6 +7,7 @@ use App\Models\User;
 
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Email;
+use MoonShine\Fields\HasMany;
 use MoonShine\Fields\Phone;
 use MoonShine\Fields\Text;
 use MoonShine\FormComponents\ChangeLogFormComponent;
@@ -32,7 +33,8 @@ class UserResource extends Resource
             Text::make('имя', 'name'),
             Phone::make('телефон', 'phone'),
             Email::make('email', 'email'),
-            Date::make('дата регистрации', 'created_at')->disabled()
+            Date::make('дата регистрации', 'created_at')->disabled(),
+            HasMany::make('Заказы', 'orders')->hideOnIndex()->hideOnForm()
         ];
 	}
 

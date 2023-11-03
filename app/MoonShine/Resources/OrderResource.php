@@ -4,6 +4,7 @@ namespace App\MoonShine\Resources;
 
 use App\Enums\OrderStatusesEnum;
 use App\Models\User;
+use App\MoonShine\Filters\PaymentStatusFilter;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
@@ -12,12 +13,16 @@ use MoonShine\Fields\BelongsTo;
 use MoonShine\Fields\BelongsToMany;
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Enum;
+use MoonShine\Fields\HasMany;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\NoInput;
 use MoonShine\Fields\Number;
 use MoonShine\Fields\Phone;
 use MoonShine\Fields\SwitchBoolean;
 use MoonShine\Fields\Text;
+use MoonShine\Filters\BelongsToFilter;
+use MoonShine\Filters\DateFilter;
+use MoonShine\Filters\SelectFilter;
 use MoonShine\FormComponents\ChangeLogFormComponent;
 use MoonShine\Models\MoonshineUserRole;
 use MoonShine\Resources\Resource;
@@ -69,7 +74,19 @@ class OrderResource extends Resource
             Text::make('пожелания клиента', 'client_wishes', fn($order) => $order->client_wishes ?? '-')
                 ->hideOnIndex()
                 ->hideOnForm(),
-            Enum::make('статус заказа', 'status')->attach(OrderStatusesEnum::class),
+            HasMany::make('Транзакции по заказу', 'transactions')->hideOnIndex()->hideOnForm(),
+            NoInput::make('статус оплаты', '', function (Order $order) {
+                $transaction = $order->transactions->last();
+                return match ($transaction->status) {
+                    'PENDING' => 'Ожидает оплаты',
+                    'SUCCEEDED' => 'Оплачено',
+                    'CANCELED' => 'Отменено',
+                };
+            })->badge('purple')->hideOnForm(),
+            Enum::make('статус заказа', 'status')->attach(OrderStatusesEnum::class)
+                ->sortable()
+                ->hint("CREATED - создан; PAID - оплачен; IN_PROCESSING - в обработке; IN_DELIVERY - передан в доставку; DELIVERED - доставлен"),
+            Date::make('заказ создан', 'created_at')->hideOnForm()->sortable(),
             NoInput::make('Состав заказа', '', fn(Order $order) => view('moonshine.order', compact('order'))->render())
                 ->hideOnIndex()
                 ->hideOnForm()
@@ -78,11 +95,11 @@ class OrderResource extends Resource
         ];
     }
 
-    public function query(): Builder
-    {
+//    public function query(): Builder
+//    {
         //все заказы кроме статуса created
-        return parent::query()->where('status', '>', 1);
-    }
+//        return parent::query()->where('status', '>', 1);
+//    }
 
     public function rules(Model $item): array
     {
@@ -96,7 +113,9 @@ class OrderResource extends Resource
 
     public function filters(): array
     {
-        return [];
+        return [
+            DateFilter::make('Дата создания заказа', 'created_at'),
+        ];
     }
 
     public function actions(): array

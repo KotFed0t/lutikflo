@@ -1,15 +1,18 @@
 <template>
     <div class="app">
         <navBar></navBar>
+        <Categories></Categories>
+        <hr>
         <router-view/>
     </div>
 </template>
 
 <script>
 import NavBar from "./components/navBar.vue";
+import Categories from "./components/Categories.vue";
 export default {
     name: "App",
-    components: {NavBar}
+    components: {Categories, NavBar}
 }
 </script>
 

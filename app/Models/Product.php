@@ -70,8 +70,15 @@ class Product extends Model
     {
         $query = Product::with('flowers')->where('is_active', 1);
 
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->get('category_id'));
+        //TODO стоит ли загрузить relation category и через него отфильтровать?
+        if ($request->has('category_slug')) {
+            $category = Category::query()
+                ->where('slug', $request->get('category_slug'))
+                ->where('is_active', 1)
+                ->firstOrFail();
+            if ($category) {
+                $query->where('category_id', $category->id);
+            }
         }
 
         if ($request->has('price_from')) {
@@ -88,8 +95,21 @@ class Product extends Model
             });
         }
 
-        $query->orderBy('products.order', 'DESC');
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+            if ($sort === 'price-desc') {
+                $query->orderBy('products.price', 'DESC');
+            } elseif ($sort === 'price-asc') {
+                $query->orderBy('products.price', 'ASC');
+            } elseif ($sort === 'novelty') {
+                $query->orderBy('products.created_at', 'DESC');
+            } else {
+                $query->orderBy('products.order', 'DESC');
+            }
+        } else {
+            $query->orderBy('products.order', 'DESC');
+        }
 
-        return $query->get();
+        return $query->paginate(5);
     }
 }

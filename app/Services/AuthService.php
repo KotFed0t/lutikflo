@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
-    public function loginOrRegister($phone)
+    public function loginOrRegister($phone): void
     {
         $user = User::where('phone', $phone)->first();
         if ($user)
@@ -16,12 +16,12 @@ class AuthService
             $this->register($phone);
     }
 
-    public function login(User $user)
+    public function login(User $user): void
     {
         Auth::login($user);
     }
 
-    public function register($phone)
+    public function register($phone): void
     {
         $user = User::create(['phone' => $phone]);
         $this->login($user);

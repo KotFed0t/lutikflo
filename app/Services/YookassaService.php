@@ -35,7 +35,6 @@ class YookassaService
     private function createTransaction(int $orderId)
     {
         return Transaction::query()->create([
-            'transaction_id' => uniqid(''),
             'order_id' => $orderId,
             'status' => self::PENDING
         ]);
@@ -74,7 +73,6 @@ class YookassaService
                 'capture' => true,
                 'description' => 'Оплата заказа',
                 'metadata' => [
-                    'transaction_id' => $transaction->transaction_id,
                     'order_id' => $order->id
                 ],
                 'receipt' => [

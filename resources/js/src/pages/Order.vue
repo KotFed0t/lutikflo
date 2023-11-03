@@ -23,15 +23,12 @@ export default {
         };
     },
     mounted() {
-        this.getOrderData()
+        this.getUser()
     },
     methods: {
-        log () {
-            console.log(this.date)
-        },
-        getOrderData () {
+        getUser() {
             axios.get('api/user').then(response => {
-                console.log(response.data.data)
+                console.log(response.data)
             }).catch(err => {
                 console.log(err)
             })

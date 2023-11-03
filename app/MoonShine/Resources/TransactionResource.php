@@ -24,7 +24,6 @@ class TransactionResource extends Resource
 	{
 		return [
 		    ID::make()->sortable(),
-            Text::make('id транзакции', 'transaction_id'),
             BelongsTo::make('заказ', 'order'),
             Text::make('статус', 'status'),
             Text::make('payment_method', 'payment_method'),

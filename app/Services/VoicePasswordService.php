@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\PhoneVerificationCode;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -29,7 +30,7 @@ class VoicePasswordService
         return null;
     }
 
-    public function sendCodeAndSaveInDb($phone)
+    public function sendCodeAndSaveInDb($phone): ?Response
     {
         $response = Http::get("$this->url/voice/$this->apiKey/$phone");
         if ($response->successful() && $response['status'] != 'error') {
@@ -46,7 +47,8 @@ class VoicePasswordService
         return null;
     }
 
-    public function checkCode($phone, $code) {
+    public function checkCode($phone, $code): bool
+    {
         $phoneVerificationCode = PhoneVerificationCode::where('phone', $phone)->where('code', $code)->firstOrFail();
         if ($phoneVerificationCode->expires_at >= now()) {
             return true;

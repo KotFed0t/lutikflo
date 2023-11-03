@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_id');
             $table->foreignId('order_id')->constrained('orders')->restrictOnDelete();
             $table->enum('status', ['PENDING', 'SUCCEEDED', 'CANCELED']);
             $table->string('payment_method')->nullable();

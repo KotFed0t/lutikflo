@@ -5,9 +5,39 @@
  */
 
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import router from "./src/router/router.js";
+import store from "./src/store/index.js";
+
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['Accept'] = 'application/json';
+window.axios.defaults.baseURL = 'http://127.0.0.1:8000';
+
+window.axios.interceptors.request.use(function (config) {
+    if ((config.method === 'post' || config.method === 'put' || config.method === 'delete') && !Cookies.get('XSRF-TOKEN')) {
+        return axios.get('/sanctum/csrf-cookie')
+            .then(response => config);
+    }
+    return config;
+});
+
+window.axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    if (error.response.status === 401 || error.response.status === 419) {
+        Cookies.remove('XSRF-TOKEN')
+        store.dispatch('clearStateAndRemoveCookie')
+        router.push({name: 'login'})
+        return Promise.reject(error);
+    }
+    if (error.response.status === 404) {
+        router.push({path: '/404', replace:true})
+        return Promise.reject(error);
+    }
+    return Promise.reject(error);
+});
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
