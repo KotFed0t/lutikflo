@@ -29,6 +29,10 @@ export default {
         show: {
             type: Boolean,
             default: false
+        },
+        redirectTo: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -72,7 +76,9 @@ export default {
                     if (response.data.status === 'success') {
                         this.$store.dispatch('login')
                         this.hideDialog()
-                        // router.push({name: 'home'})
+                        if (this.redirectTo !== '') {
+                            router.push({name: this.redirectTo})
+                        }
                     }
                 })
                 .catch(err => {

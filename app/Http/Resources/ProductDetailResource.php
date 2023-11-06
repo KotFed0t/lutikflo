@@ -22,7 +22,7 @@ class ProductDetailResource extends JsonResource
             'price' => $this->price,
             'is_active' => $this->is_active,
             'is_changeable_flower_count' => $this->isChangeableFlowerCount(),
-            'changeable_flower_info' => new FlowerResource($this->getChangeableFlower()),
+            'changeable_flower' => $this->when($this->isChangeableFlowerCount(), fn() => new FlowerResource($this->getChangeableFlower())),
             'description' => $this->description,
             'main_img' => $this->main_img,
             'images' => ImageResource::collection($this->images()->orderBy('order', 'DESC')->get()),

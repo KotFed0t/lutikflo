@@ -2,11 +2,13 @@ import {createRouter, createWebHistory} from "vue-router";
 import Home from "../pages/Home.vue";
 import Login from "../pages/Login.vue";
 import Registration from "../pages/Registration.vue";
-import Addresses from "../pages/Addresses.vue";
 import Order from "../pages/Order.vue";
 import store from "../store/index.js";
 import PageNotFound from "../pages/PageNotFound.vue";
 import Catalog from "../pages/Catalog.vue";
+import ProductDetail from "../pages/ProductDetail.vue";
+import Cart from "../pages/Cart.vue";
+import Checkout from "../pages/Checkout.vue";
 
 
 const router = createRouter({
@@ -29,21 +31,31 @@ const router = createRouter({
             // meta: {requiresAuth: true}
         },
         {
-            path: '/addresses',
-            component: Addresses,
-            name: 'addresses',
-            // meta: {requiresAuth: true}
-        },
-        {
             path: '/order',
             component: Order,
             name: 'order',
             meta: {requiresAuth: true}
         },
         {
+            path: '/cart',
+            component: Cart,
+            name: 'cart',
+        },
+        {
+            path: '/checkout',
+            component: Checkout,
+            name: 'checkout',
+            meta: {requiresAuth: true}
+        },
+        {
             path: '/catalog/:categorySlug?',
             component: Catalog,
             name: 'catalog',
+        },
+        {
+            path: '/product/:productSlug',
+            component: ProductDetail,
+            name: 'productDetail',
         },
         {
             path: '/:pathMatch(.*)',

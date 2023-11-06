@@ -23,7 +23,7 @@ class CategoryController extends Controller
         return CategoryWithProductsResource::collection(
             Category::with(['products' => function ($query) use ($productsLimit) {
                 $query->where('is_active', 1)->orderBy('order', 'DESC')->limit($productsLimit);
-            }])->where('is_active', 1)->orderBy('order', 'DESC')->get()
+            }, 'products.flowers'])->where('is_active', 1)->orderBy('order', 'DESC')->get()
         );
     }
 }

@@ -15,7 +15,6 @@
         "@vuepic/vue-datepicker": "^7.1.0",
         "js-cookie": "^3.0.5",
         "vue": "^3.2.36",
-        "vue-cookies": "^1.8.3",
         "vue-loader": "^17.2.2",
         "vue-router": "^4.2.5",
         "vuex": "^4.1.0"

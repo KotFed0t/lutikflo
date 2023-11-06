@@ -6,7 +6,9 @@
         <option v-for="el in suggestions">{{ el.value }}</option>
     </datalist>
 
-    <input type="text" placeholder="введите номер квартиры" v-model="houseNumber">
+    <input type="text" placeholder="подъезд">
+    <input type="text" placeholder="этаж">
+    <input type="text" placeholder="квартира" v-model="houseNumber">
 
     <button @click="getDeliveryPrice" class="btn-success m-1">отправить</button>
 
@@ -19,7 +21,7 @@
 import axios from "axios";
 
 export default {
-    name: "Addresses",
+    name: "AddressInput",
     data() {
         return {
             suggestions: [],

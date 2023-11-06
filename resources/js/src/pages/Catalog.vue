@@ -11,7 +11,7 @@
     </select>
     <hr>
     <div v-for="product in products" style="margin-bottom: 20px">
-        {{product}}
+        <ProductCard :product="product"></ProductCard>
     </div>
     <div ref="observer" class="observer" style="height: 30px; border: black solid 2px;"></div>
 </template>
@@ -20,10 +20,11 @@
 import Filters from "../components/Filters.vue";
 import Categories from "../components/Categories.vue";
 import axios from "axios";
+import ProductCard from "../components/ProductCard.vue";
 
 export default {
     name: "Catalog",
-    components: {Categories, Filters},
+    components: {ProductCard, Categories, Filters},
     data() {
         return {
             category: undefined,

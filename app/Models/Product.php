@@ -28,6 +28,11 @@ class Product extends Model
         'order'
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function flowers(): BelongsToMany
     {
         return $this->belongsToMany(Flower::class)->withPivot(['count', 'is_changeable_flower_count']);
@@ -68,7 +73,7 @@ class Product extends Model
 
     public static function filter(Request $request)
     {
-        $query = Product::with('flowers')->where('is_active', 1);
+        $query = Product::with(['flowers'])->where('is_active', 1);
 
         //TODO стоит ли загрузить relation category и через него отфильтровать?
         if ($request->has('category_slug')) {
