@@ -9,11 +9,14 @@ RUN apt-get update && apt-get install -y \
       curl \
 #      nodejs \
 #      npm \
+      libfreetype-dev \
+      libjpeg62-turbo-dev \
       git && \
       docker-php-ext-install pdo && \
       docker-php-ext-install pdo_mysql && \
       docker-php-ext-install bcmath && \
-      docker-php-ext-install gd && \
+      docker-php-ext-configure gd --with-freetype --with-jpeg && \
+      docker-php-ext-install -j$(nproc) gd &&  \
       docker-php-ext-install zip && \
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

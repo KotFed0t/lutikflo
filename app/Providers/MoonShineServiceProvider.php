@@ -10,7 +10,6 @@ use App\MoonShine\Resources\FlowerTypeResource;
 use App\MoonShine\Resources\OrderResource;
 use App\MoonShine\Resources\PackageResource;
 use App\MoonShine\Resources\ProductResource;
-use App\MoonShine\Resources\SettingTestResource;
 use App\MoonShine\Resources\TransactionResource;
 use App\MoonShine\Resources\UserResource;
 use Illuminate\Support\ServiceProvider;
@@ -20,11 +19,16 @@ use MoonShine\Menu\MenuItem;
 use MoonShine\Resources\CustomPage;
 use MoonShine\Resources\MoonShineUserResource;
 use MoonShine\Resources\MoonShineUserRoleResource;
+use MoonShine\Utilities\AssetManager;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        app(AssetManager::class)->add([
+            'css/croppie.css',
+        ]);
+
         app(MoonShine::class)->menu([
 //            MenuGroup::make('moonshine::ui.resource.system', [
 //                MenuItem::make('moonshine::ui.resource.admins_title', new MoonShineUserResource())

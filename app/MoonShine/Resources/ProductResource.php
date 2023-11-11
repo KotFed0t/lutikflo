@@ -48,6 +48,8 @@ class ProductResource extends Resource
                             ->dir('/products'),
                         Text::make('Название', 'name'),
                         Slug::make('slug', 'slug'),
+                        NoInput::make('Фото', '', fn(Product $product) => view('moonshine.photo', compact('product'))->render())
+                            ->hideOnIndex(),
                         BelongsTo::make('Категория', 'category_id', 'name'),
                         Number::make('Цена', 'price'),
                         SwitchBoolean::make('Активен', 'is_active')->autoUpdate(false),

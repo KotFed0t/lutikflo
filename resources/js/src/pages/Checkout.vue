@@ -35,7 +35,7 @@
             <textarea placeholder="введите комментарий для курьера" style="width: 300px"></textarea>
         </div>
         <br>
-
+        <p>Часовой пояс: Новосибирск UTC+7</p>
         <label for="date-select">выберите дату:</label>
         <select name="date" id="date-select" @change="setTimeOptions" v-model="selectedDateOffset">
             <option
