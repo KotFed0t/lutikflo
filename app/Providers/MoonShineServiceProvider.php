@@ -25,10 +25,6 @@ class MoonShineServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        app(AssetManager::class)->add([
-            'css/croppie.css',
-        ]);
-
         app(MoonShine::class)->menu([
 //            MenuGroup::make('moonshine::ui.resource.system', [
 //                MenuItem::make('moonshine::ui.resource.admins_title', new MoonShineUserResource())

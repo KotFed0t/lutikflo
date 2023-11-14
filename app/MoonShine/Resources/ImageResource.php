@@ -2,11 +2,13 @@
 
 namespace App\MoonShine\Resources;
 
+use App\MoonShine\CustomFields\ImageCustom;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Image;
 
 use MoonShine\Fields\BelongsTo;
 use MoonShine\Fields\Number;
+use MoonShine\Fields\Text;
 use MoonShine\Resources\Resource;
 use MoonShine\Fields\ID;
 use MoonShine\Actions\FiltersAction;
@@ -21,8 +23,7 @@ class ImageResource extends Resource
 	{
 		return [
 		    ID::make(),
-            \MoonShine\Fields\Image::make('image', 'image')
-                ->dir('products'),
+            ImageCustom::make('image', 'image')->dir('products'),
             Number::make('order', 'order')
         ];
 	}

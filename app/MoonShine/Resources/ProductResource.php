@@ -2,10 +2,12 @@
 
 namespace App\MoonShine\Resources;
 
+use App\MoonShine\CustomFields\ImageCustom;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 
+use Illuminate\Support\Facades\Storage;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Collapse;
 use MoonShine\Decorations\Column;
@@ -35,7 +37,7 @@ class ProductResource extends Resource
 
     public static bool $withPolicy = true;
 
-    public static array $with = ['flowers'];
+    public static array $with = ['flowers', 'category'];
 
     public function fields(): array
     {
@@ -44,12 +46,9 @@ class ProductResource extends Resource
                 Column::make([
                     Block::make('Основная информация о товаре', [
                         ID::make()->sortable(),
-                        Image::make('Главная картинка', 'main_img')
-                            ->dir('/products'),
+                        ImageCustom::make('Главная картинка', 'main_img')->dir('/products'),
                         Text::make('Название', 'name'),
                         Slug::make('slug', 'slug'),
-                        NoInput::make('Фото', '', fn(Product $product) => view('moonshine.photo', compact('product'))->render())
-                            ->hideOnIndex(),
                         BelongsTo::make('Категория', 'category_id', 'name'),
                         Number::make('Цена', 'price'),
                         SwitchBoolean::make('Активен', 'is_active')->autoUpdate(false),
@@ -102,11 +101,11 @@ class ProductResource extends Resource
 
     public function rules(Model $item): array
     {
-        $flowers = request()->get('flowers');
+        $flowers = request()->has('flowers') ? request()->get('flowers') : [];
         return [
             'flowers_is_changeable_flower_count' => ['required', function (string $attribute, mixed $value, Closure $fail) use ($flowers) {
                 $count = count(array_filter($value));
-                $flowers_count = count($flowers);
+                $flowers_count = $flowers !== null ? count($flowers) : 0;
                 if ($count > 1) {
                     $fail('Нельзя установить более 1 изменяемого цветка');
                 } elseif ($count === 1 && $flowers_count !== 1) {
@@ -121,6 +120,16 @@ class ProductResource extends Resource
                 }
             }]
         ];
+    }
+
+    protected function afterUpdated(Model $item): void
+    {
+        //delete main_img from storage if it changed
+        if (request()->has('hidden_main_img')) {
+            if (request()->get('hidden_main_img') !== $item->main_img) {
+                Storage::disk(config('moonshine.disk'))->delete(request()->get('hidden_main_img'));
+            }
+        }
     }
 
     public function search(): array

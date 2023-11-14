@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('crop-and-store-image', [ImageController::class, 'test'])->middleware('auth.moonshine')->name('crop-and-store-image');
-
 Route::get('{page}', function () {
     return view('app');
 })->where('page', '^(?!admin).*');
