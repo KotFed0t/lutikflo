@@ -30,11 +30,15 @@ services:
       - mysql
 
   nodejs:
-    image: "node:20-alpine"
+    image: "node:21"
     tty: true
     ports:
       - "5173:5173"
     working_dir: /var/www/lutikflo
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
     volumes:
       - ./:/var/www/lutikflo
     entrypoint: ["sh", "-c", "npm install && npm run dev -- --host"]

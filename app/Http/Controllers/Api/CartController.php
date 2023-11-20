@@ -24,16 +24,21 @@ class CartController extends Controller
             $cartFullData = $orderService->getCartFullData();
         } catch (ModelNotFoundException $e) {
             return response()->json([
+                'error' => 'productNotFoundError',
                 'error_message' => 'Не удалось найти некоторые товары',
-                'products_id' => array_values($e->getIds())
+                'invalid_products_id' => array_values($e->getIds())
             ], 400);
         } catch (CartValidationException $e) {
             return response()->json([
+                'error' => 'cartValidationError',
                 'error_message' => $e->getMessage(),
-                'options' => $e->getOptions()
+                'invalid_products_id' => $e->getOptions()
             ], 400);
         } catch (Exception $e) {
-            return response()->json(['error_message' => 'Что-то пошло пошло не так...'], 500);
+            return response()->json([
+                'error' => 'unknownError',
+                'error_message' => 'Что-то пошло пошло не так...'
+            ], 500);
         }
 
         return response()->json(['data' => $cartFullData]);

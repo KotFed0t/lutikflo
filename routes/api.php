@@ -54,7 +54,7 @@ Route::post('voice-password/check/{phone}/{code}', [AuthController::class, 'chec
     ->middleware('throttle:voice-password-check');
 
 //высчитать стоимость доставки по длине маршрута. В параметрах принимает {latitude} и {longitude} точки назначения
-Route::get('delivery-price', [OrderController::class, 'getDeliveryPrice']);
+Route::middleware('auth:sanctum')->get('delivery-price', [OrderController::class, 'getDeliveryPrice']);
 
 //создание заказа принимает в параметрах {cart} и {form_data}
 Route::middleware('auth:sanctum')->post('orders', [OrderController::class, 'createOrder']);
@@ -66,6 +66,5 @@ Route::middleware('auth:sanctum')->get('orders', [OrderController::class, 'getUs
 Route::middleware('auth:sanctum')->get('orders/{id}', [OrderController::class, 'getUserOrderDetails']);
 
 //провалидировать корзину и получить всю инфу по корзине. Принимает в параметрах {cart}
-//TODO потом поменять на get?
 Route::post('cart', [CartController::class, 'getCartData']);
 

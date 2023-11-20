@@ -30,22 +30,22 @@ class OrderCreateRequest extends FormRequest
             'cart.*.count' => 'required|integer|min:1',
             'cart.*.flower_count' => 'integer',
             'form_data' => "required|array",
-            'form_data.name' => 'string|min:2|max:50',
-            'form_data.email' => 'required|email',
+            'form_data.name' => 'nullable|string|min:2|max:50',
+            'form_data.email' => 'nullable|email|unique:users,email',
             'form_data.is_anonymous_sender' => 'boolean',
             'form_data.is_recipient_current_user' => 'required|boolean',
             'form_data.previously_call_to_recipient' => 'required_if:form_data.is_recipient_current_user,==,false|boolean',
-            'form_data.recipient_name' => 'required_if:form_data.is_recipient_current_user,==,false|string|min:2|max:50',
-            'form_data.recipient_phone' => 'required_if:form_data.is_recipient_current_user,==,false|regex:/^79\d{9}$/',
+            'form_data.recipient_name' => 'nullable|string|max:50',
+            'form_data.recipient_phone' => 'nullable|regex:/^79\d{9}$/',
             'form_data.delivery_address' => 'required|string',
             'form_data.delivery_address_latitude' => 'required',
             'form_data.delivery_address_longitude' => 'required',
-            'form_data.entrance' => 'string|max:20',
-            'form_data.floor' => 'string|max:20',
-            'form_data.apartment_number' => 'string|max:20',
-            'form_data.comment_for_courier' => 'string|max:255',
-            'form_data.delivery_date_time' => 'required|date_format:Y-m-d H:i:s|after:2 hours',
-            'form_data.client_wishes' => 'string|max:255'
+            'form_data.entrance' => 'nullable|string|max:20',
+            'form_data.floor' => 'nullable|string|max:20',
+            'form_data.apartment_number' => 'nullable|string|max:20',
+            'form_data.comment_for_courier' => 'nullable|string|max:255',
+            'form_data.delivery_date_time' => 'nullable|date_format:Y-m-d H:i|after:'. now()->addMinutes(89)->toDateTimeString(),
+            'form_data.client_wishes' => 'nullable|string|max:255'
         ];
     }
 

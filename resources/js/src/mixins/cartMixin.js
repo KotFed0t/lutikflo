@@ -1,7 +1,7 @@
 export default {
     data() {
         return {
-            cartFullData: undefined,
+            cartFullData: [],
         }
     },
     computed: {
@@ -25,6 +25,14 @@ export default {
         },
         calculateTotalPrice() {
             return this.cartFullData?.reduce((sum, item) => sum + this.getCartItemPrice(item), 0)
+        },
+        handleCartErrors(err) {
+            if (err.response.data.error === "cartValidationError" || err.response.data.error === "productNotFoundError") {
+                this.$store.dispatch('deleteFromCartByIds', err.response.data.invalid_products_id)
+                alert('Некоторые товары успели измениться или закончились. Корзина обновилась.')
+                return true
+            }
+            return false
         }
     }
 }

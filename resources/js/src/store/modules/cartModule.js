@@ -41,6 +41,12 @@ export const cartModule = {
                 context.commit('updateCart', cart)
             }
         },
+        deleteFromCartByIds(context, arr_products_id) {
+            let cart = JSON.parse(localStorage.getItem('cart'))
+            cart = cart.filter(item => !arr_products_id.includes(item.product_id));
+            localStorage.setItem('cart', JSON.stringify(cart))
+            context.commit('updateCart', cart)
+        },
         decreaseProductCount(context, {product_id, flower_count = undefined}) {
             let cart = JSON.parse(localStorage.getItem('cart'))
             let existed_item_id = cart.findIndex(item => item.product_id === product_id && item.flower_count === flower_count);

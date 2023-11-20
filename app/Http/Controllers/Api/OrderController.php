@@ -62,7 +62,10 @@ class OrderController extends Controller
             $formData['delivery_address_longitude']
         );
         if ($deliveryPrice === null) {
-            return response()->json(['error_message' => 'Не удалось вычислить цену доставки, попробуйте ввести адрес еще раз.'], 500);
+            return response()->json([
+                'error' => 'deliveryPriceError',
+                'error_message' => 'Не удалось вычислить цену доставки, попробуйте ввести адрес еще раз.'
+            ], 500);
         }
 
         try {
@@ -70,29 +73,45 @@ class OrderController extends Controller
             $orderData = $orderService->getOrderData($deliveryPrice);
         } catch (ModelNotFoundException $e) {
             return response()->json([
+                'error' => 'productNotFoundError',
                 'error_message' => 'Не удалось найти некоторые товары',
-                'products_id' => array_values($e->getIds())
+                'invalid_products_id' => array_values($e->getIds())
             ], 400);
             //добавить логировние
         } catch (CartValidationException $e) {
             return response()->json([
+                'error' => 'cartValidationError',
                 'error_message' => $e->getMessage(),
-                'options' => $e->getOptions()
+                'invalid_products_id' => $e->getOptions()
             ], 400);
             //добавить логирование
         } catch (Exception $e) {
-            return response()->json(['error_message' => 'Что-то пошло пошло не так...'], 500);
+            return response()->json([
+                'error' => 'unknownError',
+                'error_message' => 'Что-то пошло пошло не так...'
+            ], 500);
         }
 
         DB::beginTransaction();
         try {
+            if (isset($formData['name']))
+                $user->name = $formData['name'];
+
+            if (isset($formData['email']))
+                $user->email = $formData['email'];
+
+            $user->save();
+
             $order = $orderService->createOrder($orderData, $formData, $user->id);
             $paymentUrl = $yookassaService->createPayment($orderData, $order, $user);
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             Log::error($e->getMessage(), ['user' => $user]);
-            return response()->json(['error_message' => 'Что-то пошло пошло не так...'], 500);
+            return response()->json([
+                'error' => 'unknownError',
+                'error_message' => 'Что-то пошло пошло не так...'
+            ], 500);
         }
 
         return $paymentUrl;

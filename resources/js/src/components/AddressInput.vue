@@ -6,11 +6,7 @@
         <option v-for="el in suggestions">{{ el.value }}</option>
     </datalist>
 
-    <input type="text" placeholder="подъезд">
-    <input type="text" placeholder="этаж">
-    <input type="text" placeholder="квартира" v-model="houseNumber">
-
-    <button @click="getDeliveryPrice" class="btn-success m-1">отправить</button>
+    <p>Стоимость доставки: {{ deliveryPrice }}</p>
 
     <div>
         <p></p>
@@ -22,14 +18,16 @@ import axios from "axios";
 
 export default {
     name: "AddressInput",
+    emits: ['get'],
     data() {
         return {
             suggestions: [],
             query: '',
             timer: undefined,
             selectedAddress: undefined,
-            houseNumber: undefined,
             message: '',
+            deliveryPrice: undefined,
+
         }
     },
     methods: {
@@ -44,6 +42,12 @@ export default {
                     this.selectedAddress = result
                     console.log('selected', this.selectedAddress.value)
                     this.message = 'все введено корректно, ты красавчик!'
+                    this.getDeliveryPrice()
+                    this.$emit('get', {
+                        'address': this.selectedAddress.value,
+                        'latitude': this.selectedAddress.data.geo_lat,
+                        'longitude': this.selectedAddress.data.geo_lon,
+                    })
                 }
             } else {
                 this.message = 'введите корректный адрес и выберите предложенное значение'
@@ -82,7 +86,7 @@ export default {
                         'longitude': this.selectedAddress.data.geo_lon
                     }
                 }).then(response => {
-                    console.log(response)
+                    this.deliveryPrice = response.data.price
                 }).catch(err => {
                     console.log(err)
                 })

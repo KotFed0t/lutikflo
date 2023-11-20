@@ -1,7 +1,7 @@
 <template>
     <div style="border: black solid 1px; width: 300px; padding: 10px; margin-right: 20px; margin-bottom: 20px">
         <router-link class="nav-link" :to="{name: 'productDetail', params: {productSlug: product.slug}}">
-            <img src="http://127.0.0.1:8000/storage/products/IuhswyYODPdg01BEfiVdyH0HZxyExLsjLYe7eFp0.jpg" style="width: 200px">
+            <img :src="'/storage/'+product.main_img" style="width: 280px">
         </router-link>
 
         <p>название: {{name}}</p>

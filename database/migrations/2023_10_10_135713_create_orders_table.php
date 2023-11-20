@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('floor')->nullable();
             $table->string('apartment_number')->nullable();
             $table->string('comment_for_courier')->nullable();
-            $table->timestamp('delivery_date_time');
+            $table->timestamp('delivery_date_time')->nullable();
             $table->string('client_wishes')->nullable();
             $table->integer('order_price');
             $table->integer('delivery_price');

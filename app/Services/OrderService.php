@@ -35,12 +35,11 @@ class OrderService
 
     private function validateCart(array $cart): array
     {
-        $inactiveProducts = $this->products->where('is_active', 0);
-        if ($inactiveProducts->count() > 0) {
-            throw new CartValidationException(
-                message: 'В корзине есть товары, которых уже нет в наличии',
-                data: ['inactive_products' => $inactiveProducts]
-            );
+        $invalidProductsId = [];
+        $inactiveProductsId = $this->products->where('is_active', 0)->pluck('id');
+        if ($inactiveProductsId->count() > 0) {
+            //товары уже не в наличии
+            array_push($invalidProductsId, ...$inactiveProductsId);
         }
 
         foreach ($cart as $cartItem) {
@@ -48,22 +47,23 @@ class OrderService
             $changebleFlower = $product->getChangeableFlower();
             if ($changebleFlower !== null && !empty($cartItem['flower_count'])) {
                 if ($changebleFlower->pivot->count > $cartItem['flower_count']) {
-                    throw new CartValidationException(
-                        message: 'количество цветов в букете не может быть меньше ' . $changebleFlower->pivot->count,
-                        data: ['cart_item' => $cartItem]
-                    );
+                    //количество цветов в букете не может быть меньше заданного
+                    $invalidProductsId[] = $cartItem['product_id'];
                 }
             } elseif (!empty($cartItem['flower_count']) && $changebleFlower === null) {
-                throw new CartValidationException(
-                    message: 'Кажется товар успел измениться. Теперь у данного товара нельзя менять кол-во цветов',
-                    data: ['cart_item' => $cartItem, 'product' => $product]
-                );
+                //Теперь у данного товара нельзя менять кол-во цветов
+                $invalidProductsId[] = $cartItem['product_id'];
             } elseif (empty($cartItem['flower_count']) && $changebleFlower !== null) {
-                throw new CartValidationException(
-                    message: 'Кажется товар успел измениться. Теперь необходимо выбрать количество цветов в букете',
-                    data: ['cart_item' => $cartItem, 'product' => $product]
-                );
+                //Теперь необходимо выбрать количество цветов в букете
+                $invalidProductsId[] = $cartItem['product_id'];
             }
+        }
+
+        if (!empty($invalidProductsId)) {
+            throw new CartValidationException(
+                message: 'некоторые товары в корзине успели измениться',
+                data: array_unique($invalidProductsId)
+            );
         }
         return $cart;
     }
