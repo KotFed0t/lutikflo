@@ -22,7 +22,6 @@ class OrderCreateRequest extends FormRequest
      */
     public function rules(): array
     {
-        //TODO translate error messages (зашифровать ошибку по широте и долготе)
         //TODO к проверке даты и вермени еще добавить часы работы магазина
         return [
             'cart' => "required|array",

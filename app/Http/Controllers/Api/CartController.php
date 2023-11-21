@@ -9,12 +9,12 @@ use App\Services\OrderService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
     public function getCartData(CartGetRequest $request)
     {
-        //TODO добавить логирование
         $cart = $request->validated()['cart'];
         $products = null;
         $cartFullData = null;
@@ -35,6 +35,7 @@ class CartController extends Controller
                 'invalid_products_id' => $e->getOptions()
             ], 400);
         } catch (Exception $e) {
+            Log::error($e->getMessage(), ['cart_from_frontend' => $cart, 'location' => 'getCartData']);
             return response()->json([
                 'error' => 'unknownError',
                 'error_message' => 'Что-то пошло пошло не так...'

@@ -15,7 +15,7 @@ export const userModule = {
     },
     actions: {
         login(context) {
-            Cookies.set('isAuth', 'true', {expires: 2/24})
+            Cookies.set('isAuth', 'true', {expires: 3/24})
             context.commit('setAuth', true)
         },
         logout(context) {

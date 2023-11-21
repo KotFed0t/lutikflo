@@ -48,14 +48,19 @@ class OrderController extends Controller
 
     public function createOrder(OrderCreateRequest $request, TomTomApiService $tomTomApiService, YookassaService $yookassaService)
     {
-        //TODO TomTomApiService бросать exception или так и отдавать null?
-        //TODO настроить логирование с привязкой к номеру или id какому-нибудь
         $cartData = $request->validated()['cart'];
         $formData = $request->validated()['form_data'];
         $user = auth()->user();
         $orderService = null;
         $orderData = null;
         $paymentUrl = null;
+
+        Log::info('getting delivery price in createOrder', [
+            'user' => $user,
+            'delivery_address' => $formData['delivery_address'],
+            'delivery_address_latitude' => $formData['delivery_address_latitude'],
+            'delivery_address_longitude' => $formData['delivery_address_longitude']
+        ]);
 
         $deliveryPrice = $tomTomApiService->getDeliveryPrice(
             $formData['delivery_address_latitude'],
@@ -77,15 +82,14 @@ class OrderController extends Controller
                 'error_message' => 'Не удалось найти некоторые товары',
                 'invalid_products_id' => array_values($e->getIds())
             ], 400);
-            //добавить логировние
         } catch (CartValidationException $e) {
             return response()->json([
                 'error' => 'cartValidationError',
                 'error_message' => $e->getMessage(),
                 'invalid_products_id' => $e->getOptions()
             ], 400);
-            //добавить логирование
         } catch (Exception $e) {
+            Log::error($e->getMessage(), ['user' => $user, 'location' => 'createOrder->while getting order data from OrderService']);
             return response()->json([
                 'error' => 'unknownError',
                 'error_message' => 'Что-то пошло пошло не так...'
@@ -107,7 +111,7 @@ class OrderController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            Log::error($e->getMessage(), ['user' => $user]);
+            Log::error($e->getMessage(), ['user' => $user, 'location' => 'createOrder->DB::BeginTransaction']);
             return response()->json([
                 'error' => 'unknownError',
                 'error_message' => 'Что-то пошло пошло не так...'

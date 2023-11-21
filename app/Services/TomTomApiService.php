@@ -29,7 +29,7 @@ class TomTomApiService
             $meters = $response['routes'][0]['summary']['lengthInMeters'];
             return round($meters / 1000);
         }
-        Log::error('error while calling TomTom.com', ['requested_url' => $url, 'response' => $response->json()]);
+        Log::error('error while calling TomTom.com', ['user' => auth()->user(), 'requested_url' => $url, 'response' => $response->json()]);
         return null;
     }
 

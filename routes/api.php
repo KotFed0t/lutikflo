@@ -47,7 +47,7 @@ Route::get('filters', [FilterController::class, 'getFiltersList']);
 
 //отправить код авторизации в звонке
 Route::post('voice-password/send/{phone}', [AuthController::class, 'sendVoicePasswordCode'])
-    ->middleware('throttle:voice-password');
+    ->middleware('throttle:voice-password-send');
 
 //проверить код и залогинить/зарегать
 Route::post('voice-password/check/{phone}/{code}', [AuthController::class, 'checkVoicePasswordCode'])

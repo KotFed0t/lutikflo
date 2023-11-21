@@ -20,21 +20,11 @@ class AuthController extends Controller
     public function sendVoicePasswordCode(PhoneVerirficationCodeSendRequest $request, VoicePasswordService $voicePasswordService): JsonResponse
     {
         $phone = $request->validated()['phone'];
-//        $result = $voicePasswordService->sendCodeAndSaveInDb($phone);
-//        if ($result != null) {
-//            return response()->json(['status' => 'success', 'incoming_call_from' => $result['prefix']]);
-//        }
-//        return response()->json(['status' => 'error', 'message' => 'Что-то пошло не так, попробуйте еще раз или повторите попытку позже.']);
-
-        //для тестов
-        PhoneVerificationCode::where('phone', $phone)->delete();
-        PhoneVerificationCode::create([
-            'phone' => $phone,
-            'code' => 337,
-            'expires_at' => now()->addSeconds(180)
-        ]);
-
-        return response()->json(['status' => 'success', 'incoming_call_from' => '79996658789']);
+        $result = $voicePasswordService->sendCodeAndSaveInDb($phone);
+        if ($result['status'] === 'success') {
+            return response()->json($result);
+        }
+        return response()->json($result, 400);
     }
 
     public function checkVoicePasswordCode(PhoneVerirficationCodeCheckRequest $request, VoicePasswordService $voicePasswordService, AuthService $authService): JsonResponse
@@ -45,9 +35,9 @@ class AuthController extends Controller
                 $authService->loginOrRegister($data['phone']);
                 return response()->json(['status' => 'success']);
             }
-            return response()->json(['status' => 'error', 'message' => 'срок жизни кода истек'], 400);
+            return response()->json(['status' => 'error', 'error' => 'code_expired','message' => 'срок жизни кода истек'], 400);
         } catch (ModelNotFoundException $exception) {
-            return response()->json(['status' => 'error', 'message' => 'введен неверный код'], 400);
+            return response()->json(['status' => 'error', 'error' => 'incorrect_code','message' => 'введен неверный код'], 400);
         }
     }
 

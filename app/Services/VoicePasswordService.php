@@ -18,7 +18,7 @@ class VoicePasswordService
         $this->apiKey = config('services.voicePassword.apiKey');
     }
 
-    public function getInfo(string $uid)
+    public function getInfo(string $uid): ?Response
     {
         $response = Http::get("$this->url/info/$uid");
         if ($response->successful() && $response['status'] != 'error') {
@@ -30,21 +30,36 @@ class VoicePasswordService
         return null;
     }
 
-    public function sendCodeAndSaveInDb($phone): ?Response
+    public function sendCodeAndSaveInDb($phone): ?array
     {
-        $response = Http::get("$this->url/voice/$this->apiKey/$phone");
-        if ($response->successful() && $response['status'] != 'error') {
-            PhoneVerificationCode::where('phone', $phone)->delete();
-            PhoneVerificationCode::create([
-                'phone' => $phone,
-                'code' => $response['code'],
-                'expires_at' => now()->addSeconds(180)
-            ]);
-            return $response;
+        $lastSentCode = PhoneVerificationCode::query()->where('phone', $phone)->first();
+        if ($lastSentCode !== null) {
+            $diff = now()->diffInSeconds($lastSentCode->created_at);
+            if ($diff < 60) {
+                return ['status' => 'error', 'error' => 'send_code_rate_limit', 'error_message' => 'прошло менее минуты с прошлого звонка', 'seconds_remaining' => 60 - $diff];
+            }
         }
 
-        Log::error('error while calling voice password', ['phone' => $phone, 'response' => $response->json()]);
-        return null;
+//        $response = Http::get("$this->url/voice/$this->apiKey/$phone");
+//        if ($response->successful() && $response['status'] != 'error') {
+//            $lastSentCode?->delete();
+//            PhoneVerificationCode::create([
+//                'phone' => $phone,
+//                'code' => $response['code'],
+//                'expires_at' => now()->addSeconds(180)
+//            ]);
+//            return ['status' => 'success', 'incoming_call_from' => $response['prefix']];
+//        }
+            $lastSentCode?->delete();
+            PhoneVerificationCode::create([
+                'phone' => $phone,
+                'code' => 337,
+                'expires_at' => now()->addSeconds(180)
+            ]);
+            return ['status' => 'success', 'incoming_call_from' => '+79148807740'];
+
+//        Log::error('error while calling voice password', ['phone' => $phone, 'response' => $response->json()]);
+//        return ['status' => 'error', 'error' => 'unknown_error', 'error_message' => 'Что-то пошло не так, попробуйте еще раз или повторите попытку позже.'];
     }
 
     public function checkCode($phone, $code): bool

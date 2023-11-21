@@ -29,7 +29,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('voice-password-send', function (Request $request) {
-            return Limit::perHour(5)->by($request->route('phone'));
+            return Limit::perHour(15)->by($request->route('phone'));
         });
 
         RateLimiter::for('voice-password-check', function (Request $request) {

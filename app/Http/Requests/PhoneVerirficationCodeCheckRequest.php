@@ -30,7 +30,7 @@ class PhoneVerirficationCodeCheckRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => 'regex:/^79\d{9}$/',
+            'phone' => 'regex:/^7\d{10}$/',
             'code' => 'regex:/^[0-9]{3}$/'
         ];
     }
