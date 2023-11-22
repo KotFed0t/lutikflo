@@ -3,12 +3,11 @@
 namespace App\MoonShine\Resources;
 
 use App\Enums\OrderStatusesEnum;
+use App\Events\OrderStatusUpdated;
 use App\Models\User;
-use App\MoonShine\Filters\PaymentStatusFilter;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
-
 use MoonShine\Fields\BelongsTo;
 use MoonShine\Fields\BelongsToMany;
 use MoonShine\Fields\Date;
@@ -85,7 +84,7 @@ class OrderResource extends Resource
             })->badge('purple')->hideOnForm(),
             Enum::make('статус заказа', 'status')->attach(OrderStatusesEnum::class)
                 ->sortable()
-                ->hint("CREATED - создан; PAID - оплачен; IN_PROCESSING - в обработке; IN_DELIVERY - передан в доставку; DELIVERED - доставлен"),
+                ->hint("CREATED - создан; PAID - оплачен; IN_PROCESSING - в обработке; IN_DELIVERY - передан в доставку; DELIVERED - доставлен; CANCELED - Платеж отменен; REFUND - Произведен возврат денежных средств клиенту"),
             Date::make('заказ создан', 'created_at')->hideOnForm()->sortable(),
             NoInput::make('Состав заказа', '', fn(Order $order) => view('moonshine.order', compact('order'))->render())
                 ->hideOnIndex()
@@ -100,6 +99,11 @@ class OrderResource extends Resource
         //все заказы кроме статуса created
 //        return parent::query()->where('status', '>', 1);
 //    }
+
+    protected function afterUpdated(Model $item): void
+    {
+        event(new OrderStatusUpdated($item));
+    }
 
     public function rules(Model $item): array
     {

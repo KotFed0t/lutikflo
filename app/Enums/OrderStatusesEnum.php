@@ -5,19 +5,23 @@ namespace App\Enums;
 enum OrderStatusesEnum: int
 {
     case CREATED = 1;
-    case PAYED = 2;
+    case PAID = 2;
     case IN_PROCESSING = 3;
     case IN_DELIVERY = 4;
     case DELIVERED = 5;
+    case CANCELLED = 6;
+    case REFUND = 7;
 
     public function description(): string
     {
         return match ($this) {
             self::CREATED => 'Создан',
-            self::PAYED => 'Оплачен',
+            self::PAID => 'Оплачен',
             self::IN_PROCESSING => 'В обработке',
             self::IN_DELIVERY => 'Передан в доставку',
             self::DELIVERED => 'Доставлен',
+            self::CANCELLED => 'Платеж отменен',
+            self::REFUND => 'Произведен возврат денежных средств клиенту'
         };
     }
 

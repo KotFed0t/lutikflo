@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FilterController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -67,4 +68,7 @@ Route::middleware('auth:sanctum')->get('orders/{id}', [OrderController::class, '
 
 //провалидировать корзину и получить всю инфу по корзине. Принимает в параметрах {cart}
 Route::post('cart', [CartController::class, 'getCartData']);
+
+//обработка callback от yookassa
+Route::post('payment/callback', [PaymentController::class, 'handleCallback']);
 

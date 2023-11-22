@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('payment_method')->nullable();
             $table->string('payment_id')->nullable();
             $table->string('rrn')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

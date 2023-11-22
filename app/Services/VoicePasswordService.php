@@ -50,13 +50,13 @@ class VoicePasswordService
 //            ]);
 //            return ['status' => 'success', 'incoming_call_from' => $response['prefix']];
 //        }
-            $lastSentCode?->delete();
-            PhoneVerificationCode::create([
-                'phone' => $phone,
-                'code' => 337,
-                'expires_at' => now()->addSeconds(180)
-            ]);
-            return ['status' => 'success', 'incoming_call_from' => '+79148807740'];
+        $lastSentCode?->delete();
+        PhoneVerificationCode::create([
+            'phone' => $phone,
+            'code' => 337,
+            'expires_at' => now()->addSeconds(180)
+        ]);
+        return ['status' => 'success', 'incoming_call_from' => '+79148807740'];
 
 //        Log::error('error while calling voice password', ['phone' => $phone, 'response' => $response->json()]);
 //        return ['status' => 'error', 'error' => 'unknown_error', 'error_message' => 'Что-то пошло не так, попробуйте еще раз или повторите попытку позже.'];
@@ -69,5 +69,16 @@ class VoicePasswordService
             return true;
         }
         return false;
+    }
+
+    public function makeCallToManager(): void
+    {
+        //TODO заменить телефон
+        $response = Http::get("$this->url/voice/$this->apiKey/79137098882");
+        if ($response->successful() && $response['status'] != 'error') {
+            Log::info('successful voice call to manager about new order');
+            return;
+        }
+        Log::error('New order notification. Error while calling voice password', ['manager_phone' => 'phone...', 'response' => $response->json()]);
     }
 }

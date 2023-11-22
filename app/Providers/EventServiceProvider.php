@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\CanceledPaymentCallbackReceived;
+use App\Events\OrderStatusUpdated;
+use App\Events\SucceededPaymentCallbackReceived;
+use App\Listeners\CanceledPaymentEmailNotification;
+use App\Listeners\OrderStatusUpdatedEmailNotification;
+use App\Listeners\SucceededPaymentEmailNotification;
+use App\Listeners\SucceededPaymentVoiceNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -15,9 +22,16 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        SucceededPaymentCallbackReceived::class => [
+            SucceededPaymentEmailNotification::class,
+            SucceededPaymentVoiceNotification::class
         ],
+        CanceledPaymentCallbackReceived::class => [
+            CanceledPaymentEmailNotification::class
+        ],
+        OrderStatusUpdated::class => [
+            OrderStatusUpdatedEmailNotification::class
+        ]
     ];
 
     /**
