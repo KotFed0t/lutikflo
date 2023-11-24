@@ -40,26 +40,19 @@ class VoicePasswordService
             }
         }
 
-//        $response = Http::get("$this->url/voice/$this->apiKey/$phone");
-//        if ($response->successful() && $response['status'] != 'error') {
-//            $lastSentCode?->delete();
-//            PhoneVerificationCode::create([
-//                'phone' => $phone,
-//                'code' => $response['code'],
-//                'expires_at' => now()->addSeconds(180)
-//            ]);
-//            return ['status' => 'success', 'incoming_call_from' => $response['prefix']];
-//        }
-        $lastSentCode?->delete();
-        PhoneVerificationCode::create([
-            'phone' => $phone,
-            'code' => 337,
-            'expires_at' => now()->addSeconds(180)
-        ]);
-        return ['status' => 'success', 'incoming_call_from' => '+79148807740'];
+        $response = Http::get("$this->url/voice/$this->apiKey/$phone");
+        if ($response->successful() && $response['status'] != 'error') {
+            $lastSentCode?->delete();
+            PhoneVerificationCode::create([
+                'phone' => $phone,
+                'code' => $response['code'],
+                'expires_at' => now()->addSeconds(180)
+            ]);
+            return ['status' => 'success', 'incoming_call_from' => $response['prefix']];
+        }
 
-//        Log::error('error while calling voice password', ['phone' => $phone, 'response' => $response->json()]);
-//        return ['status' => 'error', 'error' => 'unknown_error', 'error_message' => 'Что-то пошло не так, попробуйте еще раз или повторите попытку позже.'];
+        Log::error('error while calling voice password', ['phone' => $phone, 'response' => $response->json()]);
+        return ['status' => 'error', 'error' => 'unknown_error', 'error_message' => 'Что-то пошло не так, попробуйте еще раз или повторите попытку позже.'];
     }
 
     public function checkCode($phone, $code): bool

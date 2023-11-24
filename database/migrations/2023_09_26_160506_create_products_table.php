@@ -19,9 +19,9 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->restrictOnDelete();
             $table->integer('price');
             $table->boolean('is_active')->default(false);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('main_img', 255);
-            $table->tinyInteger('order')->default(0);
+            $table->tinyInteger('order')->nullable();
             $table->timestamps();
         });
     }

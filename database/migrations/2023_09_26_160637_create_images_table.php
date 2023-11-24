@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained('products');
             $table->string('image', 255);
-            $table->tinyInteger('order')->default(0);
+            $table->tinyInteger('order')->nullable();
             $table->timestamps();
         });
     }

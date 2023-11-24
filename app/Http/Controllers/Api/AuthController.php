@@ -41,21 +41,9 @@ class AuthController extends Controller
         }
     }
 
-    public function test()
+    public function logout(AuthService $authService): JsonResponse
     {
-        $user = User::where('phone', '79137098882')->first();
-        Auth::login($user);
-        return response()->json(['status' => 'success', 'user' => $user]);
-    }
-
-    public function logout(Request $request)
-    {
-        //TODO вынести в сервис auth и дополнить его реквестом чтобы перегенерировать сессию при логине
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
+        $authService->logout();
         return response()->json(['status' => 'success', 'message' => 'logout success']);
     }
 }

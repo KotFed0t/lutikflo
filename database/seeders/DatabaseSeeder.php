@@ -30,41 +30,52 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        MoonshineUserRole::query()->create(['name' => 'Worker']);
+        if (env('app_env') === 'production') {
+            MoonshineUserRole::query()->create(['name' => 'Worker']);
 
-        FlowerType::factory(5)->create();
-        Flower::factory(7)->create();
-        Category::factory(8)->create();
-        Product::factory(30)->create();
-        Image::factory(16)->create();
-        Package::factory(3)->create();
-
-        $flower_product_rows = [];
-        foreach (range(1, 30) as $index) {
-            $flower_product_rows[] = [
-                'flower_id' => rand(1, 7),
-                'product_id' => rand(1, 30),
-                'count' => rand(3, 11),
-                'is_changeable_flower_count' => fake()->boolean()
-            ];
+            DeliveryPriceSetting::query()->create([
+                'fix_price_distance_km' => 5,
+                'fix_price' => 400,
+                'price_per_one_km' => 50,
+            ]);
         }
-        DB::table('flower_product')->insert($flower_product_rows);
 
-        $package_product_rows = [];
-        foreach (range(1, 15) as $index) {
-            $package_product_rows[] = [
-                'package_id' => rand(1, 3),
-                'product_id' => rand(1, 30),
-            ];
+        if (env('app_env') === 'local') {
+            FlowerType::factory(5)->create();
+            Flower::factory(7)->create();
+            Category::factory(8)->create();
+            Product::factory(30)->create();
+            Image::factory(16)->create();
+            Package::factory(3)->create();
+
+            $flower_product_rows = [];
+            foreach (range(1, 30) as $index) {
+                $flower_product_rows[] = [
+                    'flower_id' => rand(1, 7),
+                    'product_id' => rand(1, 30),
+                    'count' => rand(3, 11),
+                    'is_changeable_flower_count' => fake()->boolean()
+                ];
+            }
+            DB::table('flower_product')->insert($flower_product_rows);
+
+            $package_product_rows = [];
+            foreach (range(1, 15) as $index) {
+                $package_product_rows[] = [
+                    'package_id' => rand(1, 3),
+                    'product_id' => rand(1, 30),
+                ];
+            }
+            DB::table('package_product')->insert($package_product_rows);
+
+            DeliveryPriceSetting::query()->create([
+                'fix_price_distance_km' => 5,
+                'fix_price' => 400,
+                'price_per_one_km' => 50,
+            ]);
+
+            User::query()->create(['phone' => '79137098882']);
         }
-        DB::table('package_product')->insert($package_product_rows);
 
-        DeliveryPriceSetting::query()->create([
-            'fix_price_distance_km' => 5,
-            'fix_price' => 400,
-            'price_per_one_km' => 50,
-        ]);
-
-        User::query()->create(['phone' => '79137098882']);
     }
 }

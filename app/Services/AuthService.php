@@ -19,11 +19,19 @@ class AuthService
     public function login(User $user): void
     {
         Auth::login($user);
+        request()->session()->regenerate();
     }
 
     public function register($phone): void
     {
         $user = User::create(['phone' => $phone]);
         $this->login($user);
+    }
+
+    public function logout(): void
+    {
+        Auth::guard('web')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
     }
 }
