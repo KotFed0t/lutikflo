@@ -80,7 +80,7 @@ export default {
         },
         getDeliveryPrice() {
             if (this.selectedAddress !== undefined) {
-                axios.get('http://127.0.0.1:8000/api/delivery-price', {
+                axios.get('api/delivery-price', {
                     params: {
                         'latitude': this.selectedAddress.data.geo_lat,
                         'longitude': this.selectedAddress.data.geo_lon
