@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        if (env('app_env') === 'production') {
+        if (env('APP_ENV') === 'production') {
             MoonshineUserRole::query()->create(['name' => 'Worker']);
 
             DeliveryPriceSetting::query()->create([
@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        if (env('app_env') === 'local') {
+        if (env('APP_ENV') === 'local') {
             FlowerType::factory(5)->create();
             Flower::factory(7)->create();
             Category::factory(8)->create();
