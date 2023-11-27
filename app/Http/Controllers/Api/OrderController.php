@@ -118,6 +118,6 @@ class OrderController extends Controller
             ], 500);
         }
 
-        return $paymentUrl;
+        return response()->json(['payment_url' => $paymentUrl]);
     }
 }

@@ -35,7 +35,7 @@ class OrderCreateRequest extends FormRequest
             'form_data.is_recipient_current_user' => 'required|boolean',
             'form_data.previously_call_to_recipient' => 'required_if:form_data.is_recipient_current_user,==,false|boolean',
             'form_data.recipient_name' => 'nullable|string|max:50',
-            'form_data.recipient_phone' => 'nullable|regex:/^79\d{9}$/',
+            'form_data.recipient_phone' => 'nullable|regex:/^7\d{10}$/',
             'form_data.delivery_address' => 'required|string',
             'form_data.delivery_address_latitude' => 'required',
             'form_data.delivery_address_longitude' => 'required',

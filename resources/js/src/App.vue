@@ -1,9 +1,10 @@
 <template>
-    <div class="app">
+    <div class="app max-w-screen-xl mx-auto  min-h-screen px-8">
         <navBar></navBar>
         <Categories></Categories>
         <hr>
         <router-view/>
+        <foot class="sticky top-[100vh]">Footer</foot>
     </div>
 </template>
 
@@ -17,8 +18,5 @@ export default {
 </script>
 
 <style scoped>
-.app {
-    padding: 30px;
-}
 
 </style>

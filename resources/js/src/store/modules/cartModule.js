@@ -59,6 +59,10 @@ export const cartModule = {
                 localStorage.setItem('cart', JSON.stringify(cart))
                 context.commit('updateCart', cart)
             }
+        },
+        clearCart(context) {
+            localStorage.removeItem('cart')
+            context.commit('updateCart', [])
         }
     },
 }

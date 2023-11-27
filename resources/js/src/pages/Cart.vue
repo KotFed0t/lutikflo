@@ -65,6 +65,8 @@ export default {
                     console.log(err)
                     if (this.handleCartErrors(err)) {
                         this.getCartData()
+                    } else {
+                        alert('Что-то пошло не так при загрузке информации о товарах из корзины...')
                     }
                 })
             }

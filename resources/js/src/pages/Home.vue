@@ -3,6 +3,7 @@
     <Filters></Filters>
     <hr>
     Корзина <br>
+
     {{this.$store.getters.cart}}
     <hr>
     <div v-for="category in categoriesWithProducts" :key="category.id">

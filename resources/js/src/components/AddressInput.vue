@@ -43,11 +43,13 @@ export default {
                     console.log('selected', this.selectedAddress.value)
                     this.message = 'все введено корректно, ты красавчик!'
                     this.getDeliveryPrice()
-                    this.$emit('get', {
-                        'address': this.selectedAddress.value,
-                        'latitude': this.selectedAddress.data.geo_lat,
-                        'longitude': this.selectedAddress.data.geo_lon,
-                    })
+                    if (this.selectedAddress.data.geo_lat && this.selectedAddress.data.geo_lon) {
+                        this.$emit('get', {
+                            'address': this.selectedAddress.value,
+                            'latitude': this.selectedAddress.data.geo_lat,
+                            'longitude': this.selectedAddress.data.geo_lon,
+                        })
+                    }
                 }
             } else {
                 this.message = 'введите корректный адрес и выберите предложенное значение'
@@ -89,6 +91,7 @@ export default {
                     this.deliveryPrice = response.data.price
                 }).catch(err => {
                     console.log(err)
+                    this.message = err.response.data.error_message
                 })
             }
         }

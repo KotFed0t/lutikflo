@@ -1,14 +1,15 @@
 <template>
-    <h5 >Категории</h5>
-    <div style="display: flex;">
-        <div
+    <h5 class="font-medium mb-2">Категории</h5>
+    <div class="flex flex-wrap mb-5">
+        <router-link
             v-for="category in categories"
             :key="category.id"
-            style="margin-right: 30px; border: black solid 1px; padding: 3px;"
-            :class="{'selected': isSelectedCategory(category.slug)}"
+            class="font-medium  rounded p-1.5 px-2 mr-3 mb-2 shadow-lg hover:shadow-inner hover:bg-gray-200 transition-all duration-300"
+            :class="isSelectedCategory(category.slug) ? 'bg-gray-200 shadow-inner' : 'bg-white'"
+            :to="{name: 'catalog', params: {categorySlug: category.slug}}"
         >
-            <router-link class="nav-link" :to="{name: 'catalog', params: {categorySlug: category.slug}}">{{ category.name }}</router-link>
-        </div>
+            {{ category.name }}
+        </router-link>
     </div>
 </template>
 
@@ -43,7 +44,5 @@ export default {
 </script>
 
 <style scoped>
-.selected {
-    background: rgb(128, 128, 128);
-}
+
 </style>
