@@ -1,17 +1,34 @@
 <template>
+    <transition name="fade">
+    <div v-if="isMenuModalOpen" class="fixed z-1000 top-0 left-0 w-full h-full bg-white flex justify-center items-center">
+            <!-- Крестик для закрытия -->
+            <button @click="closeMenuModal" class="absolute top-5 right-2 text-gray-700 hover:text-gray-900">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <!-- Содержимое модального окна -->
+            <p class="text-lg font-semibold">Это модальное окно</p>
+            <p class="mt-4">Ваш контент здесь.</p>
+
+    </div>
+    </transition>
+
     <LoginDialog v-model:show="loginDialogVisible"></LoginDialog>
     <div class="flex justify-between py-5 mb-5">
-        <brand class="font-bold text-2xl">
+        <div class="font-bold text-2xl">
             <router-link :to="{name: 'home'}">LUTIKFLO</router-link>
-        </brand>
+        </div>
         <ul class="flex">
-            <li>
+            <li class="hidden sm:inline-block">
                 <div class="flex flex-col items-center">
                     <p class="text-xs text-gray-600">Город доставки</p>
                     <p class="font-medium">Новосибирск</p>
                 </div>
             </li>
-            <li class="ml-10">
+            <li class="hidden sm:inline-block ml-10">
                 <div class="flex flex-col items-center">
                     <p class="text-xs text-gray-600">Ежедневно с 10:00 до 21:00</p>
                     <a class="font-medium" href="tel:+79833064216">+7(983)306-42-16</a>
@@ -34,10 +51,16 @@
                     </div>
                 </router-link>
             </li>
-            <li v-if="isAuth" class="ml-10">
+            <li class="ml-10 rounded bg-neutral-100 sm:hidden" @click="showMenuModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+
+            </li>
+            <li v-if="isAuth" class="hidden sm:inline-block ml-10">
                 <button @click.prevent="logout" class="font-medium hover:border-b-2 border-black">выйти</button>
             </li>
-            <li class="ml-10">
+            <li class="hidden sm:inline-block ml-10">
                 <div v-if="!isAuth">
                     <button @click.prevent="showLoginDialogVisible" class="font-medium hover:border-b-2 border-black">войти</button>
                 </div>
@@ -54,7 +77,8 @@ export default {
     name: "navBar",
     data() {
         return {
-            loginDialogVisible: false
+            loginDialogVisible: false,
+            isMenuModalOpen: false
         }
     },
     components: {LoginDialog},
@@ -72,11 +96,27 @@ export default {
         },
         showLoginDialogVisible() {
             this.loginDialogVisible = true
-        }
+        },
+        showMenuModal() {
+            this.isMenuModalOpen = true
+            document.body.classList.add('overflow-hidden');
+        },
+         closeMenuModal() {
+             this.isMenuModalOpen = false
+             document.body.classList.remove('overflow-hidden');
+         }
     }
 }
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
 
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
 </style>

@@ -4,8 +4,8 @@
         <router-link
             v-for="category in categories"
             :key="category.id"
-            class="font-medium  rounded p-1.5 px-2 mr-3 mb-2 shadow-lg hover:shadow-inner hover:bg-gray-200 transition-all duration-300"
-            :class="isSelectedCategory(category.slug) ? 'bg-gray-200 shadow-inner' : 'bg-white'"
+            class="font-medium rounded p-1.5 px-2 mr-3 mb-2 hover:shadow-inner hover:bg-neutral-300 transition-all duration-300"
+            :class="isSelectedCategory(category.slug) ? 'bg-neutral-300 shadow-inner' : 'bg-neutral-100 shadow-lg'"
             :to="{name: 'catalog', params: {categorySlug: category.slug}}"
         >
             {{ category.name }}

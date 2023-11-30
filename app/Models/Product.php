@@ -115,6 +115,6 @@ class Product extends Model
             $query->orderBy('products.order', 'DESC');
         }
 
-        return $query->paginate(5);
+        return $query->paginate(10);
     }
 }

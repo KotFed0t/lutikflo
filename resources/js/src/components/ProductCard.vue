@@ -1,18 +1,33 @@
 <template>
-    <div style="border: black solid 1px; width: 300px; padding: 10px; margin-right: 20px; margin-bottom: 20px">
-        <router-link class="nav-link" :to="{name: 'productDetail', params: {productSlug: product.slug}}">
-            <img :src="'/storage/'+product.main_img" style="width: 280px">
-        </router-link>
 
-        <p>название: {{name}}</p>
-        <p>цена: {{ product.price}}</p>
-        <button v-if="product.is_changeable_flower_count" class="btn btn-dark">Выбрать количество цветов</button>
-        <button v-if="!inCart && !product.is_changeable_flower_count" @click="addToCart" class="btn btn-dark">Добавить в корзину</button>
-        <button v-if="inCart && !product.is_changeable_flower_count" class="btn btn-dark">уже в корзине</button>
-    </div>
+    <router-link class="" :to="{name: 'productDetail', params: {productSlug: product.slug}}">
+        <div
+            class="max-w-[300px] shadow-xl rounded-lg border border-transparent hover:shadow-none hover:border-neutral-300 transition-all duration-300 max-w-xs">
+            <img :src="'/storage/'+product.main_img" class="rounded-t-lg w-full">
+            <div class="px-3 py-2">
+                <p class="text-xs font-bold text-neutral-600 h-8 overflow-hidden overflow-ellipsis leading-tight mb-1 whitespace-normal">{{ name }}</p>
+                <p class="text-sm font-bold mb-3">{{ product.price }} руб</p>
+                <div class="flex justify-center">
+                    <button v-if="product.is_changeable_flower_count"
+                            class="text-xs bg-black text-white rounded-lg hover:bg-neutral-700 py-2 w-full">Выбрать количество
+                    </button>
+                    <button v-if="!inCart && !product.is_changeable_flower_count" @click.prevent="addToCart"
+                            class="text-xs bg-black text-white rounded-lg hover:bg-neutral-700 py-2 w-full"
+                    >
+                        Добавить в корзину
+                    </button>
+                    <button v-if="inCart && !product.is_changeable_flower_count" @click.prevent="$router.push({name: 'cart'})"
+                            class="text-xs bg-neutral-200 rounded-lg hover:bg-neutral-400 py-2 w-full ">уже в корзине
+                    </button>
+                </div>
+            </div>
+        </div>
+    </router-link>
 </template>
 
 <script>
+import router from "../router/router.js";
+
 export default {
     name: "ProductCard",
     props: {
@@ -26,12 +41,15 @@ export default {
         },
         name() {
             if (this.product.is_changeable_flower_count) {
-               return this.product.name +' ('+ this.product.changeable_flower.count + 'шт.)'
+                return this.product.name + ' (' + this.product.changeable_flower.count + 'шт.)'
             }
             return this.product.name
         }
     },
     methods: {
+        router() {
+            return router
+        },
         addToCart() {
             this.$store.dispatch('addToCart', {product_id: this.product.id})
         }

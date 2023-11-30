@@ -10,10 +10,12 @@
         <option value="novelty" :selected="sort === 'price-asc'">По новизне</option>
     </select>
     <hr>
-    <div v-for="product in products" style="margin-bottom: 20px">
-        <ProductCard :product="product"></ProductCard>
+    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        <div v-for="product in products">
+            <ProductCard :product="product"></ProductCard>
+        </div>
     </div>
-    <div ref="observer" class="observer" style="height: 30px; border: black solid 2px;"></div>
+    <div ref="observer" class="observer"></div>
 </template>
 
 <script>
