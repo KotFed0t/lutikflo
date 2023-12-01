@@ -1,5 +1,5 @@
 <template>
-    <div class="dialog" v-if="show" @click="hideDialog">
+    <div class="dialog z-40" v-if="show" @click="hideDialog">
         <div @click.stop class="dialog_content">
             <div v-if="showEnterPhoneDialog">
                 <h4>Ввод телефона</h4>
