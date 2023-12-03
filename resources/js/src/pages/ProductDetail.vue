@@ -1,20 +1,8 @@
 <template>
-    product detail
-    <!--    {{ product }}-->
-    <hr>
-    <!--    <div v-if="product?.is_changeable_flower_count">-->
-    <!--        <button @click="increaseFlowerCount" class="btn btn-dark">+</button>-->
-    <!--        <div>{{ flower_count }}</div>-->
-    <!--        <button @click="decreaseFlowerCount" :disabled="flower_count === product.changeable_flower.count"-->
-    <!--                class="btn btn-dark">- -->
-    <!--        </button>-->
-    <!--    </div>-->
 
-    <!--    &lt;!&ndash;  учитывать что продукт может быть не в наличии и выводить disabled кнопку 'товар закончился'  &ndash;&gt;-->
-    <!--    <button v-if="!inCart" @click="addToCart" class="btn btn-dark">добавить в корзину</button>-->
-    <!--    <button v-else class="btn btn-dark">уже в корзине</button>-->
 
-    <div class="flex flex-col sm:flex-row">
+
+    <div class="flex flex-col mt-14 mb-28 sm:flex-row sm:mt-20">
         <div v-if="images.length > 1" class="sm:w-3/5">
             <div @mouseover="showArrows=true"
                  @mouseout="showArrows=false"
@@ -91,7 +79,78 @@
             </div>
 
         </div>
-        <div class="sm:w-2/5">{{ product }}</div>
+        <div class="mt-8 mx-1 sm:w-2/5 sm:mt-0 sm:mx-10 lg:ml-0">
+            <h3 class="text-xl font-bold">{{ name }}</h3>
+            <div v-if="product?.is_changeable_flower_count" class="mt-8 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+                <p class="text-sm ml-1 font-medium">Выберите кол-во цветов в букете:</p>
+            </div>
+            <div class="mt-10 flex justify-between">
+                <p class="text-xl font-bold">{{ price }} ₽</p>
+                <div v-if="product?.is_changeable_flower_count" class="flex items-center">
+                    <button @click="decreaseFlowerCount" :disabled="flower_count === product.changeable_flower.count"
+                            class="pr-2 bg-neutral-100 p-1.5 rounded-l-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15"/>
+                        </svg>
+                    </button>
+                    <div class="pr-2 bg-neutral-100 p-1.5">
+                        {{ flower_count }}
+                    </div>
+                    <button @click="increaseFlowerCount" class="bg-neutral-100 p-1.5 rounded-r-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="my-10">
+                <button v-if="!inCart && product?.is_active === 1"
+                        @click="addToCart"
+                        class=" bg-black text-white rounded-lg hover:bg-neutral-700 py-2 w-full"
+                >
+                    Добавить в корзину
+                </button>
+                <button v-else-if="inCart && product?.is_active === 1"
+                        class=" bg-neutral-200 rounded-lg hover:bg-neutral-400 py-2 w-full"
+                        @click.prevent="$router.push({name: 'cart'})">уже в корзине
+                </button>
+                <button v-else-if="product?.is_active !== 1"
+                        class="disabled bg-neutral-200 rounded-lg py-2 w-full"
+                >Товар закончился
+                </button>
+            </div>
+
+            <div v-if="product?.flowers.length > 0" class="mt-5">
+                <h3 class="text-lg font-medium">Состав:</h3>
+                <p v-for="flower in product?.flowers">
+                    <span v-if="product?.is_changeable_flower_count">
+                        {{ flower.name }} - {{ flower_count }} шт.
+                    </span>
+                    <span v-else>
+                        {{ flower.name }} - {{ flower.count }} шт.
+                    </span>
+                </p>
+            </div>
+
+            <div v-if="product?.packages.length > 0" class="mt-5">
+                <h3 class="text-lg font-medium">Упаковка:</h3>
+                <p v-for="product_package in product?.packages">
+                    {{ product_package.name }} - {{ product_package.count }} шт.
+                </p>
+            </div>
+
+            <div v-if="product?.description" class="mt-5">
+                <h3 class="text-lg font-medium">Описание:</h3>
+                <div v-html="product.description"></div>
+            </div>
+
+        </div>
     </div>
 </template>
 
@@ -130,6 +189,18 @@ export default {
     computed: {
         cart() {
             return this.$store.getters.cart
+        },
+        name() {
+            if (this.product?.is_changeable_flower_count) {
+                return this.product.name + ' (' + this.flower_count + ' шт.)'
+            }
+            return this.product?.name
+        },
+        price() {
+            if (this.product?.is_changeable_flower_count) {
+                return this.product.price + (this.flower_count - this.product.flowers[0].count) * this.product.flowers[0].price_by_flower
+            }
+            return this.product?.price
         }
     },
     watch: {
@@ -177,9 +248,9 @@ export default {
                 if (response.data.data.changeable_flower) {
                     if (this.$route.query.flower_count > response.data.data.changeable_flower.count) {
                         this.flower_count = Number(this.$route.query.flower_count)
-                        return
+                    } else {
+                        this.flower_count = response.data.data.changeable_flower.count
                     }
-                    this.flower_count = response.data.data.changeable_flower.count
                 }
                 if (response.data.data.main_img) {
                     this.images.push(response.data.data.main_img)
@@ -187,7 +258,8 @@ export default {
                 if (response.data.data.images) {
                     this.images.push(...response.data.data.images.map(obj => obj['image']))
                 }
-                console.log(this.images)
+
+                this.isProductInCart()
             }).catch(err => {
                 console.log(err)
             })
