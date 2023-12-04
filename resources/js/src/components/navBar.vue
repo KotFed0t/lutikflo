@@ -114,6 +114,7 @@ export default {
         },
         showLoginDialogVisible() {
             this.loginDialogVisible = true
+            document.body.classList.add('overflow-hidden');
         },
         showMenuModal() {
             this.isMenuModalOpen = true
