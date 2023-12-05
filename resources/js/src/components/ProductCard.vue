@@ -2,22 +2,22 @@
 
     <router-link class="" :to="{name: 'productDetail', params: {productSlug: product.slug}}">
         <div
-            class="max-w-[300px] shadow-xl rounded-lg border border-transparent hover:shadow-none hover:border-neutral-300 transition-all duration-300 max-w-xs">
+            class="max-w-[280px] shadow-xl rounded-lg border border-transparent hover:shadow-none hover:border-neutral-300 transition-all duration-300">
             <img :src="'/storage/'+product.main_img" class="rounded-t-lg w-full">
             <div class="px-3 py-2">
-                <p class="text-xs font-bold text-neutral-600 h-8 overflow-hidden overflow-ellipsis leading-tight mb-1 whitespace-normal">{{ name }}</p>
-                <p class="text-sm font-bold mb-3">{{ product.price }} руб</p>
+                <p class="text-xs font-bold text-neutral-600 h-8 overflow-hidden overflow-ellipsis leading-tight mb-1 whitespace-normal xl:text-sm xl:h-11">{{ name }}</p>
+                <p class="text-sm font-bold mb-3 xl:text-base">{{ product.price }} ₽</p>
                 <div class="flex justify-center">
                     <button v-if="product.is_changeable_flower_count"
-                            class="text-xs bg-black text-white rounded-lg hover:bg-neutral-700 py-2 w-full">Выбрать количество
+                            class="text-xs bg-black text-white rounded-lg hover:bg-neutral-700 py-2 w-full xl:text-sm">Выбрать количество
                     </button>
                     <button v-if="!inCart && !product.is_changeable_flower_count" @click.prevent="addToCart"
-                            class="text-xs bg-black text-white rounded-lg hover:bg-neutral-700 py-2 w-full"
+                            class="text-xs bg-black text-white rounded-lg hover:bg-neutral-700 py-2 w-full xl:text-sm"
                     >
                         Добавить в корзину
                     </button>
                     <button v-if="inCart && !product.is_changeable_flower_count" @click.prevent="$router.push({name: 'cart'})"
-                            class="text-xs bg-neutral-200 rounded-lg hover:bg-neutral-400 py-2 w-full ">уже в корзине
+                            class="text-xs bg-neutral-200 rounded-lg hover:bg-neutral-400 py-2 w-full xl:text-sm">уже в корзине
                     </button>
                 </div>
             </div>

@@ -1,21 +1,27 @@
 <template>
-    <h3 style="text-align: center">Catalog</h3>
     <Filters></Filters>
     <hr>
-    Сортировать по:
-    <select v-model="sort" @change="sortProducts">
+    <h3 class="text-2xl font-bold my-8">{{ categoryName }}</h3>
+
+    <div class="flex mb-8 text-sm items-center sm:text-base">
+        <p class="mr-2">Сортировать по:</p>
+        <select v-model="sort" @change="sortProducts" class="border px-2 py-1.5 rounded-lg bg-neutral-50">
         <option value="popular" :selected="sort === 'popular'">По популярности</option>
         <option value="price-asc" :selected="sort === 'price-desc'">Цена по возрастанию</option>
         <option value="price-desc" :selected="sort === 'price-asc'">Цена по убыванию</option>
         <option value="novelty" :selected="sort === 'price-asc'">По новизне</option>
     </select>
-    <hr>
-    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+    </div>
+
+
+
+    <div class="grid grid-cols-2 gap-3 gap-y-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-5 lg:gap-y-8">
         <div v-for="product in products">
             <ProductCard :product="product"></ProductCard>
         </div>
     </div>
-    <div ref="observer" class="observer"></div>
+
+    <div ref="observer" class="observer h-2 mt-24"></div>
 </template>
 
 <script>
@@ -29,7 +35,7 @@ export default {
     components: {ProductCard, Categories, Filters},
     data() {
         return {
-            category: undefined,
+            categoryName: undefined,
             flower_types_id: undefined,
             price_from: undefined,
             price_to: undefined,
@@ -43,6 +49,7 @@ export default {
     mounted() {
         this.getProducts()
         this.initFromQueryParams()
+        this.getCategoryName()
 
         let options = {
             rootMargin: "0px",
@@ -62,9 +69,21 @@ export default {
             this.products = []
             this.getProducts()
             this.resetSort()
+            this.getCategoryName()
         }
     },
     methods: {
+        getCategoryName() {
+            if (this.$route.params.categorySlug) {
+                axios.get(`api/categories/${this.$route.params.categorySlug}`).then(response => {
+                    this.categoryName = response.data.data.name
+                }).catch(err => {
+                    console.log(err)
+                })
+            } else {
+                this.categoryName = 'Каталог товаров'
+            }
+        },
         getProducts() {
             let params = {}
             if (this.$route.params.categorySlug) {

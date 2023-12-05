@@ -1,12 +1,24 @@
 <template>
-    <p style="color: red">{{ this.message }}</p>
-    <input type="text" name="city" list="suggestions" v-model="query" @input="getSuggestions" @change="checkAddress"
-           style="width: 800px;">
-    <datalist id="suggestions">
-        <option v-for="el in suggestions">{{ el.value }}</option>
-    </datalist>
+    <p v-if="message" class="text-sm font-medium text-red-800 mb-2 bg-red-50 px-2 py-1.5 rounded-lg my-1">{{ this.message }}</p>
 
-    <p>Стоимость доставки: {{ deliveryPrice }}</p>
+    <label for="address" class="block text-neutral-700 text-sm font-medium mb-1">адрес доставки <span class="text-red-500 font-bold">*</span></label>
+    <input id="address" ref="addressInput" type="text" autocomplete="off" @focus="showSuggestions=true" @blur="showSuggestions=false" v-model="query"
+           class="w-full border border-black px-2 py-1.5 rounded-lg"
+    >
+
+    <div class="relative">
+        <div v-if="showSuggestions && query!== ''" @mousedown.prevent class="w-full absolute z-20 bg-white border shadow-2xl rounded-lg">
+            <div v-for="el in suggestions" @click="query = el.value" class="cursor-pointer hover:bg-neutral-200 leading-5 p-2">
+                {{ el.value }}
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center mt-2">
+        <p >Стоимость доставки:</p>
+        <p v-if="deliveryPrice" class="ml-1 font-medium"> {{ deliveryPrice }} ₽</p>
+    </div>
+
 
     <div>
         <p></p>
@@ -18,7 +30,7 @@ import axios from "axios";
 
 export default {
     name: "AddressInput",
-    emits: ['get'],
+    emits: ['get', 'getPrice'],
     data() {
         return {
             suggestions: [],
@@ -27,27 +39,36 @@ export default {
             selectedAddress: undefined,
             message: '',
             deliveryPrice: undefined,
-
+            showSuggestions: false
         }
+    },
+    watch: {
+      query() {
+          this.getSuggestions()
+      },
+      suggestions() { //подсказки подгружаются не сразу, нужно ждать пока обновятся
+          this.checkAddress()
+      }
     },
     methods: {
         checkAddress() {
             this.selectedAddress = undefined
-            console.log(this.query)
+            this.deliveryPrice = undefined
+            this.$emit('getPrice', this.deliveryPrice)
+            this.message = ''
             const result = this.suggestions.find((el) => el.value === this.query)
             if (result !== undefined) {
                 if (result.data.house === null) {
                     this.message = 'продолжите вводить адрес вплоть до номера дома'
                 } else {
                     this.selectedAddress = result
-                    console.log('selected', this.selectedAddress.value)
-                    this.message = 'все введено корректно, ты красавчик!'
+                    this.$refs.addressInput.blur()
                     this.getDeliveryPrice()
                     if (this.selectedAddress.data.geo_lat && this.selectedAddress.data.geo_lon) {
                         this.$emit('get', {
                             'address': this.selectedAddress.value,
                             'latitude': this.selectedAddress.data.geo_lat,
-                            'longitude': this.selectedAddress.data.geo_lon,
+                            'longitude': this.selectedAddress.data.geo_lon
                         })
                     }
                 }
@@ -89,6 +110,7 @@ export default {
                     }
                 }).then(response => {
                     this.deliveryPrice = response.data.price
+                    this.$emit('getPrice', this.deliveryPrice)
                 }).catch(err => {
                     console.log(err)
                     this.message = err.response.data.error_message

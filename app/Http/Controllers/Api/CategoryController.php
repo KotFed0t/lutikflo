@@ -26,4 +26,9 @@ class CategoryController extends Controller
             }, 'products.flowers'])->where('is_active', 1)->orderBy('order', 'DESC')->get()
         );
     }
+
+    public function getCategory(Category $category): CategoryResource
+    {
+        return new CategoryResource($category);
+    }
 }

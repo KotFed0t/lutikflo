@@ -43,7 +43,7 @@
                     <p class="mb-4">Cейчас вам позвонит робот с номера {{ incoming_call_from }} и продиктует код.</p>
                 </div>
                 <p>Ваш номер +{{ phone }}</p>
-                <button @click="goToEnterPhone" class="text-neutral-600 block border-b-2 border-b border-neutral-500 mb-4 hover:text-black">изменить номер</button>
+                <button @click="goToEnterPhone" class="text-neutral-600 block border-b border-neutral-500 mb-4 hover:text-black">изменить номер</button>
                 <input v-model="code" v-mask="'###'" class="rounded border border-black focus:outline-none py-1.5 px-2 w-full mb-4">
 
                 <button
@@ -65,7 +65,7 @@
                     {{ isEnterCodeLoading ? 'Отправка...' : 'Отправить' }}
                 </button>
 
-                <button v-if="countdown===0" @click="sendCode" class="text-neutral-600 block border-b-2 border-b border-neutral-500 hover:text-black">Отправить код повторно</button>
+                <button v-if="countdown===0" @click="sendCode" class="text-neutral-600 block border-b border-neutral-500 hover:text-black">Отправить код повторно</button>
                 <p v-if="countdown!==0">Отправить код еще раз через {{ formattedTime }}</p>
             </div>
         </div>

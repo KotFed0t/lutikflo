@@ -5,7 +5,7 @@
             v-for="flowerType in flowerTypes"
             :key="flowerType.id"
             @click="selectFlowerType(flowerType.id)"
-            class="rounded-full  font-medium p-1.5 px-3 mr-3 mb-2 hover:shadow-lg transition-all duration-300"
+            class="text-sm rounded-full font-medium p-1.5 px-3 mr-3 mb-2 hover:shadow-lg transition-all duration-300 sm:text-base"
             :class="selectedFlowerTypes.includes(flowerType.id) ? 'bg-neutral-400 shadow-lg' : 'bg-neutral-100'"
         >
             {{ flowerType.name }}
@@ -14,11 +14,11 @@
     <h5 class="font-medium mb-2">Цена</h5>
     <div class="mb-3">
         <input type="number" v-model="price_from" :placeholder="' от '+minPrice"
-               class="border border-neutral-300 border-2 rounded-md mb-2 mr-2 focus:outline-none focus:border-neutral-400">
+               class="w-28 px-2 border border-neutral-300 border-2 rounded-lg mb-2 mr-2 focus:outline-none focus:border-neutral-400">
         <input type="number" v-model="price_to" :placeholder="' до '+maxPrice"
-               class="border border-neutral-300 border-2 rounded-md mb-2 mr-2 focus:outline-none focus:border-neutral-400">
+               class="w-28 px-2 border border-neutral-300 border-2 rounded-lg mb-2 mr-2 focus:outline-none focus:border-neutral-400">
         <button v-if="selectedFlowerTypes.length !== 0 || price_from || price_to" @click="pushToCatalogWithParams"
-                class="font-medium py-1.5 px-2 rounded-lg text-white bg-black hover:bg-neutral-700">применить
+                class="py-1.5 px-2 rounded-lg text-white bg-black hover:bg-neutral-700">применить
         </button>
     </div>
 </template>

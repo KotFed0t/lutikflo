@@ -34,6 +34,9 @@ Route::get('categories', [CategoryController::class, 'index']);
 // это для главной вывод категорий вместе с товарами. Можно указать параметр (?product_limit=10)
 Route::get('categories/products', [CategoryController::class, 'getCategoriesWithProducts']);
 
+//категория по slug
+Route::get('categories/{category}', [CategoryController::class, 'getCategory']);
+
 // в get параметрах принимает category_id, и фильтры
 Route::get('products', [ProductController::class, 'index']);
 

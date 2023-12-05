@@ -3,7 +3,7 @@
     <hr>
     <div v-for="category in categoriesWithProducts" :key="category.id" class="mt-3">
         <h4 class="text-xl mb-4 mt-4 md:text-2xl">{{ category.name }}</h4>
-        <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        <div class="grid grid-cols-2 gap-3 gap-y-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-5">
             <div v-for="product in category.products" :key="product.id">
                 <ProductCard :product="product"></ProductCard>
             </div>

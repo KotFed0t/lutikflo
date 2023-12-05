@@ -1,123 +1,254 @@
 <template>
-    Страница оформления заказа
-    <p>общая стоимость товаров: {{ totalPrice }}</p>
-    <div class="form-control">
-        <input type="text" v-model="name" placeholder="ваше имя" style="margin-right: 10px" :disabled="disableName">
-        <input type="checkbox" v-model="is_anonymous_sender"> доставить анонимно
-        <p v-if="currentName && disableName === true" @click="disableName=false">редактировать</p>
-        <p v-else-if="currentName && disableName === false" @click="disableName=true; name=currentName">отменить
-            редактирование</p>
-        <br>
-        <input type="email" v-model="email" placeholder="email" :disabled="disableEmail">
-        <p v-if="currentEmail && disableEmail === true" @click="disableEmail=false">редактировать</p>
-        <p v-else-if="currentEmail && disableEmail === false" @click="disableEmail=true; email=currentEmail">отменить
-            редактирование</p>
-        <p v-if="errors['email']" style="color: red">{{ errors['email'] }}</p>
-        <p v-if="emailWarning" style="color: red">возможно email введен некорректно</p>
-        <br>
-        <button @click="is_recipient_current_user=false" class="btn btn-dark"
-                style="margin-bottom: 20px; margin-right: 10px" :disabled="!is_recipient_current_user">доставить
-            получателю
-        </button>
-        <button @click="is_recipient_current_user=true" class="btn btn-dark"
-                style="margin-bottom: 20px; margin-right: 10px" :disabled="is_recipient_current_user">доставить мне
-        </button>
+    <div class="lg:flex items-start justify-center mt-10">
+        <div class="max-w-[640px] lg:w-8/12 lg:mr-auto">
 
-        <div v-if="!is_recipient_current_user">
-            <p>Мы можем согласовать дату и время с получателем:</p>
-            <div>
-                <input type="radio" id="huey" name="drone" :value="true" v-model="previously_call_to_recipient"
-                       :checked="previously_call_to_recipient===true"/>
-                <label for="huey">Да, согласовать с получателем</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2">
+                <div>
+                    <label for="name" class="block text-neutral-700 text-sm font-medium mb-1">Ваше имя</label>
+                    <input id="name" type="text" v-model="name" placeholder="ваше имя" :disabled="disableName"
+                           :class="{'bg-neutral-200 ': disableName}"
+                           class="w-full border border-black rounded-lg px-2 py-1.5">
+                    <button v-if="currentName && disableName === true" @click="disableName=false"
+                            class="block text-neutral-700 hover:text-black text-sm mt-1">редактировать
+                    </button>
+                    <button v-else-if="currentName && disableName === false" @click="disableName=true; name=currentName"
+                            class="block text-neutral-700 hover:text-black text-sm mt-1">отменить
+                        редактирование
+                    </button>
+                </div>
+                <div class="flex items-center mt-5 sm:ml-5 sm:mt-0">
+                    <input type="checkbox" v-model="is_anonymous_sender">
+                    <p class="ml-2">доставить анонимно</p>
+                </div>
+
             </div>
-            <div>
-                <input type="radio" id="dewey" name="drone" :value="false" v-model="previously_call_to_recipient"
-                       :checked="previously_call_to_recipient===false"/>
-                <label for="dewey">Нет, не звонить получателю</label>
+
+
+            <br>
+            <p v-if="errors['email']"
+               class="text-sm font-medium text-red-800 mb-2 bg-red-50 px-2 py-1.5 rounded-lg my-1 sm:w-1/2">
+                {{ errors['email'] }}</p>
+            <p v-if="emailWarning"
+               class="text-sm font-medium text-red-800 mb-2 bg-red-50 px-2 py-1.5 rounded-lg my-1 sm:w-1/2">возможно
+                email введен некорректно</p>
+            <label for="email" class="block text-neutral-700 text-sm font-medium mb-1">email <span
+                class="text-red-500 font-bold">*</span></label>
+            <input id="email" type="email" v-model="email" placeholder="email" :disabled="disableEmail"
+                   :class="{'bg-neutral-200 ': disableEmail}"
+                   class="w-full border border-black rounded-lg px-2 py-1.5 sm:w-1/2">
+            <button v-if="currentEmail && disableEmail === true" @click="disableEmail=false"
+                    class="block text-neutral-700 hover:text-black text-sm mt-1">редактировать
+            </button>
+            <button v-else-if="currentEmail && disableEmail === false" @click="disableEmail=true; email=currentEmail"
+                    class="block text-neutral-700 hover:text-black text-sm mt-1">отменить
+                редактирование
+            </button>
+
+
+            <br>
+            <div class="mb-5 flex">
+                <button @click="is_recipient_current_user=false"
+                        :class="{'bg-black text-white': !is_recipient_current_user}"
+                        class="block border border-black px-2 py-1.5 rounded-lg mr-4"
+                        :disabled="!is_recipient_current_user">доставить получателю
+                </button>
+                <button @click="is_recipient_current_user=true"
+                        :class="{'bg-black text-white': is_recipient_current_user}"
+                        class="block border border-black px-2 py-1.5 rounded-lg"
+                        :disabled="is_recipient_current_user">доставить мне
+                </button>
+            </div>
+
+            <div v-if="!is_recipient_current_user">
+                <p class="font-medium mb-1">Мы можем согласовать дату и время с получателем:</p>
+                <div>
+                    <input type="radio" id="yes" class="mr-2 mb-2" :value="true" v-model="previously_call_to_recipient"
+                           :checked="previously_call_to_recipient===true"/>
+                    <label for="yes">Да, согласовать с получателем</label>
+                </div>
+                <div>
+                    <input type="radio" id="no" class="mr-2" :value="false" v-model="previously_call_to_recipient"
+                           :checked="previously_call_to_recipient===false"/>
+                    <label for="no">Нет, не звонить получателю</label>
+                </div>
+                <br>
+                <p v-if="errors['recipient_phone']"
+                   class="text-sm font-medium text-red-800 mb-2 bg-red-50 px-2 py-1.5 rounded-lg my-1">
+                    {{ errors['recipient_phone'] }}</p>
+                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="recipientName" class="block text-neutral-700 text-sm font-medium mb-1">имя
+                            получателя</label>
+                        <input v-model="recipient_name"
+                               id="recipientName"
+                               type="text"
+                               placeholder="имя получателя"
+                               class="w-full border border-black rounded-lg px-2 py-1.5"
+                        >
+                    </div>
+
+                    <div>
+                        <label for="recipientPhone" class="block text-neutral-700 text-sm font-medium mb-1">телефон
+                            получателя <span v-if="previously_call_to_recipient" class="text-red-500 font-bold">*</span></label>
+                        <input
+                            id="recipientPhone"
+                            type="tel"
+                            v-model="recipient_phone"
+                            v-mask="'7##########'"
+                            placeholder="+7"
+                            class="w-full border border-black rounded-lg px-2 py-1.5"
+                        >
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <p v-if="errors['delivery_address']"
+               class="text-sm font-medium text-red-800 mb-2 bg-red-50 px-2 py-1.5 rounded-lg my-1">
+                {{ errors['delivery_address'] }}</p>
+            <AddressInput @get="getDeliveryAddressData" @getPrice="getDeliveryPrice"></AddressInput>
+
+
+            <div class="grid grid-cols-3 gap-2 mt-4">
+                <div>
+                    <label for="entrance" class="block text-neutral-700 text-sm font-medium mb-1">подъезд</label>
+                    <input id="entrance" type="text" placeholder="подъезд"
+                           class="w-full  border border-black rounded-lg px-2 py-1.5" v-model="entrance">
+                </div>
+
+                <div>
+                    <label for="floor" class="block text-neutral-700 text-sm font-medium mb-1">этаж</label>
+                    <input id="floor" type="text" placeholder="этаж"
+                           class="w-full border border-black rounded-lg px-2 py-1.5" v-model="floor">
+                </div>
+
+                <div>
+                    <label for="houseNumber" class="block text-neutral-700 text-sm font-medium mb-1">квартира</label>
+                    <input id="houseNumber" type="text" placeholder="квартира"
+                           class="w-full  border border-black rounded-lg px-2 py-1.5" v-model="houseNumber">
+                </div>
+            </div>
+
+            <br>
+
+            <div v-if="!showCommentForCurrier" @click="this.showCommentForCurrier = true"
+                 class="flex items-center cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                </svg>
+                <p class="ml-1">Добавить комментарий для курьера</p>
+            </div>
+            <div v-else>
+                <div @click="this.showCommentForCurrier = false" class="flex items-center cursor-pointer mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15"/>
+                    </svg>
+                    <p class="ml-1">Убрать комментарий для курьера</p>
+                </div>
+
+                <textarea v-model="comment_for_courier" placeholder="введите комментарий для курьера"
+                          class="resize-none h-32 w-full p-2 border border-black rounded-lg"></textarea>
             </div>
             <br>
-            <input v-model="recipient_name" type="text" placeholder="имя получателя"
-                   style="margin-bottom: 20px; margin-right: 10px">
-            <input
-                type="tel"
-                v-model="recipient_phone"
-                v-mask="'7##########'"
-                placeholder="+7(___)-__-__"
-                style="margin-bottom: 20px; margin-right: 10px"
-            >
-            <p v-if="errors['recipient_phone']" style="color: red">{{ errors['recipient_phone'] }}</p>
+            <p class="font-medium mb-2">Часовой пояс: Новосибирск UTC+7</p>
+
+            <p v-if="errors['delivery_date_time']"
+               class="text-sm font-medium text-red-800 mb-2 bg-red-50 px-2 py-1.5 rounded-lg my-1">
+                {{ errors['delivery_date_time'] }}</p>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="w-full">
+                    <label for="date-select" class="block text-neutral-700 text-sm font-medium mb-1">дата доставки <span
+                        v-if="!previously_call_to_recipient || is_recipient_current_user"
+                        class="text-red-500 font-bold">*</span></label>
+                    <select name="date" id="date-select" @change="setTimeOptions" v-model="selectedDateOffset"
+                            class="w-full border border-black rounded-lg px-2 py-1.5 text-sm sm:text-base">
+                        <option
+                            v-for="option in dateOptions"
+                            :key="option.offset"
+                            :value="option.offset"
+                        >
+                            {{ option.content }}
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="time-select" class="block text-neutral-700 text-sm font-medium mb-1">время доставки
+                        <span v-if="!previously_call_to_recipient || is_recipient_current_user"
+                              class="text-red-500 font-bold">*</span></label>
+                    <select name="time" id="time-select"
+                            v-model="delivery_date_time"
+                            class="w-full border border-black rounded-lg px-2 py-1.5 text-sm sm:text-base"
+                    >
+                        <option value="" disabled>выберите время</option>
+                        <option v-if="timeOptions.length === 0" disabled>Сегодня уже нельзя выбрать время доставки
+                        </option>
+                        <option
+                            v-for="option in timeOptions"
+                            :key="option.value"
+                            :value="option.value"
+                        >
+                            {{ option.content }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+
+            <br>
+
+            <p class="text-neutral-700 text-sm font-medium mb-1">Особые пожелания:</p>
+            <textarea v-model="client_wishes" placeholder="Комментарии"
+                      class="resize-none h-32 w-full p-2 border border-black rounded-lg"></textarea>
+            <br>
+            <div v-if="Object.keys(this.errorsBackend).length !== 0"
+                 class="text-sm font-medium text-red-800 mb-2 bg-red-50 p-2 rounded-lg mt-2">
+                <p class="mb-2 font-bold">Пожалуйста исправьте следующие ошибки:</p>
+                <ul>
+                    <li v-for="(value, key) in errorsBackend">
+                        <p class="font-bold">{{ key }}:</p>
+                        <ul>
+                            <li v-for="error in value" class="ml-2 mb-1">- {{ error }}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <br>
+
         </div>
 
-        <AddressInput @get="getDeliveryAddressData"></AddressInput>
-        <p v-if="errors['delivery_address']" style="color: red">{{ errors['delivery_address'] }}</p>
-        <input type="text" placeholder="подъезд" v-model="entrance">
-        <input type="text" placeholder="этаж" v-model="floor">
-        <input type="text" placeholder="квартира" v-model="houseNumber">
-        <br>
 
-        <p v-if="!showCommentForCurrier" @click="this.showCommentForCurrier = true">+ Добавить комментарий для
-            курьера</p>
-        <div v-else>
-            <p @click="this.showCommentForCurrier = false">- Убрать комментарий для курьера</p>
-            <textarea v-model="comment_for_courier" placeholder="введите комментарий для курьера"
-                      style="width: 300px"></textarea>
-        </div>
-        <br>
-        <p>Часовой пояс: Новосибирск UTC+7</p>
-        <label for="date-select">выберите дату:</label>
-        <select name="date" id="date-select" @change="setTimeOptions" v-model="selectedDateOffset">
-            <option
-                v-for="option in dateOptions"
-                :key="option.offset"
-                :value="option.offset"
-            >
-                {{ option.content }}
-            </option>
-        </select>
+        <div v-if="cart.length !== 0"  class=" max-w-[400px] mt-2 mx-auto shadow-2xl p-5 rounded-xl lg:w-4/12 lg:mt-0 lg:mx-0 lg:ml-5">
+            <div class="flex justify-between mb-3 font-bold">
+                <p>Стоимость товаров ({{ cart?.length }})</p>
+                <p>{{ totalPrice }} ₽</p>
+            </div>
 
-        <label for="time-select">выберите время:</label>
-        <select name="time" id="time-select" style="margin-bottom: 20px; margin-right: 10px"
-                v-model="delivery_date_time">
-            <option value="" disabled>выберите время</option>
-            <option v-if="timeOptions.length === 0" disabled>Сегодня уже нельзя выбрать время доставки</option>
-            <option
-                v-for="option in timeOptions"
-                :key="option.value"
-                :value="option.value"
-            >
-                {{ option.content }}
-            </option>
-        </select>
-        <br>
-        <p v-if="errors['delivery_date_time']" style="color: red">{{ errors['delivery_date_time'] }}</p>
-        выбрано время: {{ delivery_date_time }}
-        <p>Особые пожелания:</p>
-        <textarea v-model="client_wishes" placeholder="Комментарии" style="width: 300px"></textarea>
-        <br>
-        <div v-if="Object.keys(this.errorsBackend).length !== 0" style="border: red solid 1px">
-            Пожалуйста исправьте следующие ошибки:
-            <ul>
-                <li v-for="(value, key) in errorsBackend">
-                    {{ key }}:
-                    <ul>
-                        <li v-for="error in value">{{ error }}</li>
-                    </ul>
-                </li>
-            </ul>
+            <div v-if="delivery_price" class="flex justify-between">
+                <p class="text-sm">Стоимость доставки</p>
+                <p>{{ delivery_price }} ₽</p>
+            </div>
+
+            <div class="flex justify-between text-xl font-bold mt-6">
+                <p>Итого</p>
+                <p>{{ totalPrice + (delivery_price !== undefined ? delivery_price : 0) }} ₽</p>
+            </div>
+
         </div>
-        <br>
-        <!--        <button-->
-        <!--            @click="checkout"-->
-        <!--            :disabled="isLoading"-->
-        <!--            class="btn btn-dark" style="margin-bottom: 20px; margin-right: 10px"-->
-        <!--        >-->
-        <!--            {{isLoading ? 'обработка...': 'оплатить заказ'}}-->
-        <!--        </button>-->
+
+    </div>
+
+    <div class="flex justify-center mt-6 lg:mt-0 lg:justify-start">
         <button
             @click="checkout"
             :disabled="isLoading"
             type="button"
-            class="text-white bg-black hover:bg-gray-800 font-medium rounded-lg text-md px-4 py-2 text-center inline-flex items-center">
+            class="text-white bg-black hover:bg-gray-800 rounded-lg text-md px-4 py-2 text-center inline-flex items-center"
+        >
             <span v-if="isLoading">
             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin"
                  viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -131,8 +262,9 @@
             </span>
             {{ isLoading ? 'обработка...' : 'оплатить заказ' }}
         </button>
-
     </div>
+
+
 </template>
 
 <script>
@@ -171,6 +303,7 @@ export default {
             delivery_address: undefined,
             delivery_address_latitude: undefined,
             delivery_address_longitude: undefined,
+            delivery_price: undefined,
             comment_for_courier: undefined,
             client_wishes: undefined,
             errors: {},
@@ -229,6 +362,9 @@ export default {
             this.delivery_address = data.address
             this.delivery_address_longitude = data.longitude
             this.delivery_address_latitude = data.latitude
+        },
+        getDeliveryPrice(delivery_price) {
+            this.delivery_price = delivery_price
         },
         setDateOptions() {
             let now = DateTime.now().setZone("Asia/Novosibirsk")

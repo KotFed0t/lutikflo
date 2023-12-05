@@ -2,25 +2,25 @@
     <!--    <div class="app max-w-screen-xl mx-auto min-h-screen px-8">-->
     <div class="min-h-screen">
         <div class="">
-            <div class="max-w-screen-xl mx-auto px-2">
+            <div class="max-w-screen-xl mx-auto px-3 md:px-8">
                 <navBar></navBar>
             </div>
         </div>
 
         <div class="">
-            <div class="max-w-screen-xl mx-auto px-2">
+            <div class="max-w-screen-xl mx-auto px-3 md:px-8">
                 <Categories></Categories>
             </div>
         </div>
 
         <div class="">
-            <div class="max-w-screen-xl mx-auto px-2">
+            <div class="max-w-screen-xl mx-auto px-3 md:px-8">
                 <router-view/>
             </div>
         </div>
 
         <div class="sticky top-[100vh] bg-neutral-800">
-            <div class="max-w-screen-xl mx-auto px-2 mt-10">
+            <div class="max-w-screen-xl mx-auto px-3 mt-10 md:px-8">
                 <footer class="flex flex-col items-center text-white py-8 px-6">
                     <h4 class="mb-3 font-bold text-lg">LUTIKFLO</h4>
 
