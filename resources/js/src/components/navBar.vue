@@ -48,6 +48,11 @@
                     <a class="font-medium" href="tel:+79833064216">+7(983)306-42-16</a>
                 </div>
             </li>
+
+            <li v-if="isAuth" class="hidden sm:inline-block ml-10">
+                <button @click="$router.push({name: 'orders'})" class="font-medium hover:border-b-2 border-black">заказы</button>
+            </li>
+
             <li class="ml-10">
                 <router-link :to="{name: 'cart'}">
                     <div class="relative">
@@ -73,6 +78,7 @@
                 </svg>
 
             </li>
+
             <li v-if="isAuth" class="hidden sm:inline-block ml-10">
                 <button @click.prevent="logout" class="font-medium hover:border-b-2 border-black">выйти</button>
             </li>

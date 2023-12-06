@@ -6,6 +6,7 @@ use App\Enums\OrderStatusesEnum;
 use App\Exceptions\CartValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderCreateRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\DeliveryPriceSetting;
 use App\Models\Order;
 use App\Models\Product;
@@ -32,8 +33,7 @@ class OrderController extends Controller
 
     public function getUserOrders()
     {
-        //TODO создать Resource
-        return auth()->user()->orders;
+        return OrderResource::collection(auth()->user()->orders()->with('products')->orderBy('created_at', 'DESC')->get());
     }
 
     public function getUserOrderDetails($id)

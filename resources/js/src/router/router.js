@@ -1,14 +1,13 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Home from "../pages/Home.vue";
 import Login from "../pages/Login.vue";
-import Registration from "../pages/Registration.vue";
-import Order from "../pages/Order.vue";
 import store from "../store/index.js";
 import PageNotFound from "../pages/PageNotFound.vue";
 import Catalog from "../pages/Catalog.vue";
 import ProductDetail from "../pages/ProductDetail.vue";
 import Cart from "../pages/Cart.vue";
 import Checkout from "../pages/Checkout.vue";
+import Orders from "../pages/Orders.vue";
 
 
 const router = createRouter({
@@ -25,18 +24,6 @@ const router = createRouter({
             name: 'login',
         },
         {
-            path: '/register',
-            component: Registration,
-            name: 'register',
-            // meta: {requiresAuth: true}
-        },
-        {
-            path: '/order',
-            component: Order,
-            name: 'order',
-            meta: {requiresAuth: true}
-        },
-        {
             path: '/cart',
             component: Cart,
             name: 'cart',
@@ -45,6 +32,12 @@ const router = createRouter({
             path: '/checkout',
             component: Checkout,
             name: 'checkout',
+            meta: {requiresAuth: true}
+        },
+        {
+            path: '/orders',
+            component: Orders,
+            name: 'orders',
             meta: {requiresAuth: true}
         },
         {

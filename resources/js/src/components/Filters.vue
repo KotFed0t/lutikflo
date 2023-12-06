@@ -1,6 +1,6 @@
 <template>
-    <h5 class="font-medium mb-2">Цветы в составе</h5>
-    <div class="flex flex-wrap mb-5">
+    <h5 v-if="flowerTypes.length > 0" class="font-medium mb-2">Цветы в составе</h5>
+    <div v-if="flowerTypes.length > 0" class="flex flex-wrap mb-5">
         <button
             v-for="flowerType in flowerTypes"
             :key="flowerType.id"
@@ -12,14 +12,22 @@
         </button>
     </div>
     <h5 class="font-medium mb-2">Цена</h5>
-    <div class="mb-3">
+    <div class="mb-6 sm:flex sm:items-center">
         <input type="number" v-model="price_from" :placeholder="' от '+minPrice"
-               class="w-28 px-2 border border-neutral-300 border-2 rounded-lg mb-2 mr-2 focus:outline-none focus:border-neutral-400">
+               class="w-28 px-2 border border-neutral-300 border-2 rounded-lg mr-2 focus:outline-none focus:border-neutral-400">
         <input type="number" v-model="price_to" :placeholder="' до '+maxPrice"
-               class="w-28 px-2 border border-neutral-300 border-2 rounded-lg mb-2 mr-2 focus:outline-none focus:border-neutral-400">
-        <button v-if="selectedFlowerTypes.length !== 0 || price_from || price_to" @click="pushToCatalogWithParams"
-                class="py-1.5 px-2 rounded-lg text-white bg-black hover:bg-neutral-700">применить
-        </button>
+               class="w-28 px-2 border border-neutral-300 border-2 rounded-lg focus:outline-none focus:border-neutral-400">
+
+        <div class="mt-4 text-sm sm:mt-0 sm:ml-4 sm:text-base">
+            <button v-if="selectedFlowerTypes.length !== 0 || price_from || price_to || !isQueryParamsEmpty" @click="pushToCatalogWithParams"
+                    class="py-1.5 px-2 rounded-lg text-white bg-black hover:bg-neutral-700">применить
+            </button>
+
+            <button v-if="!isQueryParamsEmpty && $route.name === 'catalog'" @click="clearFilters"
+                    class="py-1.5 px-2 ml-2 rounded-lg border border-black hover:bg-neutral-100">очистить
+            </button>
+        </div>
+
     </div>
 </template>
 
@@ -36,19 +44,37 @@ export default {
             selectedFlowerTypes: [],
             price_from: undefined,
             price_to: undefined,
-            categorySlug: ''
+            categorySlug: '',
+            isQueryParamsEmpty: true
         }
     },
     mounted() {
         this.getFilters()
         this.initializeFromQueryParams()
+        this.checkIsQueryParamsEmpty()
     },
     watch: {
         $route() {
             this.updateFilters()
+            this.checkIsQueryParamsEmpty()
         }
     },
     methods: {
+        checkIsQueryParamsEmpty() {
+            if (this.$route.query.flower_types_id?.length > 0) {
+                this.isQueryParamsEmpty = false
+                return false
+            } else if (this.$route.query.price_from) {
+                this.isQueryParamsEmpty = false
+                return false
+            } else if (this.$route.query.price_to) {
+                this.isQueryParamsEmpty = false
+                return false
+            }
+
+            this.isQueryParamsEmpty = true
+            return true
+        },
         getFilters() {
             let params = {}
             if (this.$route.params.categorySlug) {
@@ -113,6 +139,12 @@ export default {
                 this.price_to = undefined
                 this.getFilters()
             }
+        },
+        clearFilters() {
+            this.selectedFlowerTypes = []
+            this.price_from = undefined
+            this.price_to = undefined
+            this.pushToCatalogWithParams()
         }
     }
 }
