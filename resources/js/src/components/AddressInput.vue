@@ -83,8 +83,6 @@ export default {
                 axios.post('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address', {
                     "query": this.query,
                     "locations": [{
-                        "area": "Новосибирский"
-                    }, {
                         "city": "Новосибирск"
                     }]
                 }, {

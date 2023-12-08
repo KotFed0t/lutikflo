@@ -196,6 +196,7 @@ export default {
                             if (this.redirectTo !== '') {
                                 router.push({name: this.redirectTo})
                             }
+                            this.$emit('loggedIn', true)
                         }
                     })
                     .catch(err => {

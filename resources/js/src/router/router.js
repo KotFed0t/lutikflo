@@ -8,6 +8,8 @@ import ProductDetail from "../pages/ProductDetail.vue";
 import Cart from "../pages/Cart.vue";
 import Checkout from "../pages/Checkout.vue";
 import Orders from "../pages/Orders.vue";
+import Delivery from "../pages/Delivery.vue";
+import Contacts from "../pages/Contacts.vue";
 
 
 const router = createRouter({
@@ -27,6 +29,16 @@ const router = createRouter({
             path: '/cart',
             component: Cart,
             name: 'cart',
+        },
+        {
+            path: '/delivery',
+            component: Delivery,
+            name: 'delivery',
+        },
+        {
+            path: '/contacts',
+            component: Contacts,
+            name: 'contacts',
         },
         {
             path: '/checkout',

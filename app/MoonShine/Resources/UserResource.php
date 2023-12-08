@@ -33,7 +33,7 @@ class UserResource extends Resource
             Text::make('имя', 'name'),
             Phone::make('телефон', 'phone'),
             Email::make('email', 'email'),
-            Date::make('дата регистрации', 'created_at')->disabled(),
+            Date::make('дата регистрации', 'created_at')->withTime()->format('d.m.Y H:i'),
             HasMany::make('Заказы', 'orders')->hideOnIndex()->hideOnForm()
         ];
 	}

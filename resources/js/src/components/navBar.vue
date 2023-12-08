@@ -13,14 +13,19 @@
             <!-- Содержимое модального окна -->
             <div class="p-4 mt-14">
                 <div v-if="!isAuth" class="mt-4">
-                    <a @click="showLoginDialogVisible" class="text-lg font-semibold">Войти</a>
+                    <button @click="showLoginDialogVisible" class="text-lg font-semibold">Войти</button>
                 </div>
                 <div v-if="isAuth" class="mt-4">
-                    <a class="mt-4 text-lg font-semibold">Выйти</a>
+                    <button @click="logout(); $router.push({name: 'home'}); closeMenuModal();" class="text-lg font-semibold">Выйти</button>
                 </div>
                 <div v-if="isAuth" class="mt-4">
-                    <a class="mt-4 text-lg font-semibold">Мои заказы</a>
+                    <button @click="$router.push({name: 'orders'}); closeMenuModal();" class="text-lg font-semibold">Заказы</button>
                 </div>
+
+                <button @click="$router.push({name: 'contacts'}); closeMenuModal();" class="block text-lg font-semibold mt-4">Контакты</button>
+
+                <button @click="$router.push({name: 'delivery'}); closeMenuModal();" class="block text-lg font-semibold mt-4">Доставка</button>
+
                 <hr class="mt-4">
                 <p class="mt-4 text-sm font-medium text-gray-600">Город доставки - Новосибирск</p>
                 <p class="mt-4 mb-2 text-sm font-medium  text-gray-600">Работаем ежедневно с 10:00 до 21:00</p>
@@ -30,27 +35,42 @@
         </div>
     </transition>
 
-    <LoginDialog v-model:show="loginDialogVisible"></LoginDialog>
+    <LoginDialog v-model:show="loginDialogVisible" @loggedIn="closeMenuModal()"></LoginDialog>
     <div class="flex justify-between py-5 mb-5">
         <div class="font-bold text-2xl">
             <router-link :to="{name: 'home'}">LUTIKFLO</router-link>
         </div>
         <ul class="flex">
-            <li class="hidden sm:inline-block">
+            <li class="hidden lg:inline-block">
                 <div class="flex flex-col items-center">
                     <p class="text-xs text-gray-600">Город доставки</p>
                     <p class="font-medium">Новосибирск</p>
                 </div>
             </li>
-            <li class="hidden sm:inline-block ml-10">
+            <li class="hidden lg:inline-block ml-10">
                 <div class="flex flex-col items-center">
                     <p class="text-xs text-gray-600">Ежедневно с 10:00 до 21:00</p>
                     <a class="font-medium" href="tel:+79833064216">+7(983)306-42-16</a>
                 </div>
             </li>
 
-            <li v-if="isAuth" class="hidden sm:inline-block ml-10">
-                <button @click="$router.push({name: 'orders'})" class="font-medium hover:border-b-2 border-black">заказы</button>
+            <li class="hidden lg:inline-block ml-10">
+                <router-link :to="{name: 'contacts'}" class="font-medium hover:border-b-2 border-black pb-0.5">
+                    контакты
+                </router-link>
+            </li>
+
+            <li class="hidden lg:inline-block ml-10">
+                <router-link :to="{name: 'delivery'}" class="font-medium hover:border-b-2 border-black pb-0.5">
+                    доставка
+                </router-link>
+            </li>
+
+
+            <li v-if="isAuth" class="hidden lg:inline-block ml-10">
+                <router-link :to="{name: 'orders'}" class="font-medium hover:border-b-2 border-black pb-0.5">
+                    заказы
+                </router-link>
             </li>
 
             <li class="ml-10">
@@ -70,7 +90,7 @@
                     </div>
                 </router-link>
             </li>
-            <li class="ml-10 rounded bg-neutral-100 sm:hidden" @click="showMenuModal()">
+            <li class="ml-10 cursor-pointer rounded bg-neutral-100 lg:hidden" @click="showMenuModal()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                      stroke="currentColor" class="w-8 h-8">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -79,12 +99,12 @@
 
             </li>
 
-            <li v-if="isAuth" class="hidden sm:inline-block ml-10">
-                <button @click.prevent="logout" class="font-medium hover:border-b-2 border-black">выйти</button>
+            <li v-if="isAuth" class="hidden lg:inline-block ml-10">
+                <button @click="logout(); $router.push({name: 'home'});" class="font-medium hover:border-b-2 border-black">выйти</button>
             </li>
-            <li class="hidden sm:inline-block ml-10">
+            <li class="hidden lg:inline-block">
                 <div v-if="!isAuth">
-                    <button @click.prevent="showLoginDialogVisible" class="font-medium hover:border-b-2 border-black">
+                    <button @click.prevent="showLoginDialogVisible" class="font-medium hover:border-b-2 border-black ml-10">
                         войти
                     </button>
                 </div>

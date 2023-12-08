@@ -75,7 +75,7 @@ class YookassaService
                 'confirmation' => [
                     'type' => 'redirect',
                     'locale' => 'ru_RU',
-                    'return_url' => 'https://merchant-site.ru/return_url',
+                    'return_url' => env('APP_URL') . '/orders',
                 ],
                 'capture' => true,
                 'description' => 'Оплата заказа',

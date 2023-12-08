@@ -2,7 +2,7 @@
     <div class="lg:flex items-start justify-center mt-10">
         <div class="max-w-[640px] lg:w-8/12 lg:mr-auto">
 
-            <div class="grid grid-cols-1 sm:grid-cols-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 mb-6">
                 <div>
                     <label for="name" class="block text-neutral-700 text-sm font-medium mb-1">Ваше имя</label>
                     <input id="name" type="text" v-model="name" placeholder="ваше имя" :disabled="disableName"
@@ -16,7 +16,7 @@
                         редактирование
                     </button>
                 </div>
-                <div class="flex items-center mt-5 sm:ml-5 sm:mt-0">
+                <div class="flex items-center mt-5 pt-0 sm:ml-5 sm:mt-0" :class="{'sm:pt-6': !currentName}">
                     <input type="checkbox" v-model="is_anonymous_sender">
                     <p class="ml-2">доставить анонимно</p>
                 </div>
@@ -24,7 +24,6 @@
             </div>
 
 
-            <br>
             <p v-if="errors['email']"
                class="text-sm font-medium text-red-800 mb-2 bg-red-50 px-2 py-1.5 rounded-lg my-1 sm:w-1/2">
                 {{ errors['email'] }}</p>
@@ -45,8 +44,8 @@
             </button>
 
 
-            <br>
-            <div class="mb-5 flex">
+
+            <div class="my-6 flex">
                 <button @click="is_recipient_current_user=false"
                         :class="{'bg-black text-white': !is_recipient_current_user}"
                         class="block border border-black px-2 py-1.5 rounded-lg mr-4"
