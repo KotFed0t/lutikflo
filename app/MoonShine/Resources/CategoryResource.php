@@ -45,7 +45,7 @@ class CategoryResource extends Resource
 
 	public function rules(Model $item): array
 	{
-        $countProducts = Product::query()->where('category_id', $item->id)->where('is_active', 1)->count();
+        $countProducts = Product::query()->where('category_id', $item->id)->where('is_active', true)->count();
 	    return [
             'is_active' => function (string $attribute, mixed $value, Closure $fail) use ($countProducts) {
                 if ($value == false && $countProducts !== 0)

@@ -169,6 +169,7 @@ export default {
                 this.$router.push({name: 'checkout'})
             } else {
                 this.loginDialogVisible = true
+                document.body.classList.add('overflow-hidden');
             }
         }
     }

@@ -13,7 +13,9 @@ class CategoryController extends Controller
     public function index()
     {
         return CategoryResource::collection(
-            Category::where('is_active', 1)->orderBy('order', 'DESC')->get()
+            Category::whereHas('products', function ($query) {
+                $query->where('is_active', true);
+            })->where('is_active', true)->orderBy('order', 'DESC')->get()
         );
     }
 
@@ -22,8 +24,10 @@ class CategoryController extends Controller
         $productsLimit = $request->has('products_limit') ? $request->get('products_limit') : 4;
         return CategoryWithProductsResource::collection(
             Category::with(['products' => function ($query) use ($productsLimit) {
-                $query->where('is_active', 1)->orderBy('order', 'DESC')->limit($productsLimit);
-            }, 'products.flowers'])->where('is_active', 1)->orderBy('order', 'DESC')->get()
+                $query->where('is_active', true)->orderBy('order', 'DESC')->limit($productsLimit);
+            }, 'products.flowers'])->whereHas('products', function ($query) {
+                $query->where('is_active', true);
+            })->where('is_active', true)->orderBy('order', 'DESC')->get()
         );
     }
 

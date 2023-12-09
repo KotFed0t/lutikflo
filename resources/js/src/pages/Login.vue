@@ -23,6 +23,7 @@ export default {
     methods: {
         showLoginDialog() {
             this.loginDialogVisible = true
+            document.body.classList.add('overflow-hidden');
         }
     }
 }

@@ -13,7 +13,7 @@ services:
       - ./:/var/www/lutikflo
       - ./storage/docker/logs/nginx:/var/log/nginx
     depends_on:
-      - mysql
+      - postgres
       - app
 
   app:
@@ -27,7 +27,7 @@ services:
     volumes:
       - ./:/var/www/lutikflo
     depends_on:
-      - mysql
+      - postgres
 
   nodejs:
     image: "node:21"
@@ -44,15 +44,28 @@ services:
     entrypoint: ["sh", "-c", "npm install && npm run dev -- --host"]
 #    entrypoint: ["sh", "-c", "npm install && rm ./public/hot && npm run build"]  #- для прода
 
-  mysql:
-    image: mysql:8.0
+#  mysql:
+#    image: mysql:8.0
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: ${DB_DATABASE}
+#      MYSQL_USER: ${DB_USERNAME}
+#      MYSQL_PASSWORD: ${DB_PASSWORD}
+#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+#    volumes:
+#      - ./storage/docker/mysql_data:/var/lib/mysql
+#    ports:
+#      - "3306:3306"
+
+  postgres:
+    image: postgres:16
     restart: always
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - ./storage/docker/mysql_data:/var/lib/mysql
+      - ./storage/docker/postgres_data:/var/lib/postgresql/data
     ports:
-      - "3306:3306"
+      - "5434:5432"
+

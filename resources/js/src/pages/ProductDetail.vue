@@ -110,17 +110,17 @@
             </div>
 
             <div class="my-10">
-                <button v-if="!inCart && product?.is_active === 1"
+                <button v-if="!inCart && product?.is_active === true"
                         @click="addToCart"
                         class=" bg-black text-white rounded-lg hover:bg-neutral-700 py-2 w-full"
                 >
                     Добавить в корзину
                 </button>
-                <button v-else-if="inCart && product?.is_active === 1"
+                <button v-else-if="inCart && product?.is_active === true"
                         class=" bg-neutral-200 rounded-lg hover:bg-neutral-400 py-2 w-full"
                         @click.prevent="$router.push({name: 'cart'})">уже в корзине
                 </button>
-                <button v-else-if="product?.is_active !== 1"
+                <button v-else-if="product?.is_active !== true"
                         class="disabled bg-neutral-200 rounded-lg py-2 w-full"
                 >Товар закончился
                 </button>

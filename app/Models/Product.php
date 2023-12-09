@@ -73,13 +73,13 @@ class Product extends Model
 
     public static function filter(Request $request)
     {
-        $query = Product::with(['flowers'])->where('is_active', 1);
+        $query = Product::with(['flowers'])->where('is_active', true);
 
         //TODO стоит ли загрузить relation category и через него отфильтровать?
         if ($request->has('category_slug')) {
             $category = Category::query()
                 ->where('slug', $request->get('category_slug'))
-                ->where('is_active', 1)
+                ->where('is_active', true)
                 ->firstOrFail();
             if ($category) {
                 $query->where('category_id', $category->id);

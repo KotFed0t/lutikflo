@@ -10,6 +10,8 @@ import Checkout from "../pages/Checkout.vue";
 import Orders from "../pages/Orders.vue";
 import Delivery from "../pages/Delivery.vue";
 import Contacts from "../pages/Contacts.vue";
+import Privacy from "../pages/Privacy.vue";
+import Agreement from "../pages/Agreement.vue";
 
 
 const router = createRouter({
@@ -39,6 +41,16 @@ const router = createRouter({
             path: '/contacts',
             component: Contacts,
             name: 'contacts',
+        },
+        {
+            path: '/privacy',
+            component: Privacy,
+            name: 'privacy',
+        },
+        {
+            path: '/agreement',
+            component: Agreement,
+            name: 'agreement',
         },
         {
             path: '/checkout',

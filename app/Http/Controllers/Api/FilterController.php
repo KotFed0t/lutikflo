@@ -13,14 +13,14 @@ class FilterController extends Controller
 {
     public function getFiltersList(Request $request): JsonResponse
     {
-        $query = Product::where('is_active', 1);
+        $query = Product::where('is_active', true);
         $categoryId = null;
 
         //TODO стоит ли загрузить relation category и через него отфильтровать?
         if ($request->has('category_slug')) {
             $category = Category::query()
                 ->where('slug', $request->get('category_slug'))
-                ->where('is_active', 1)
+                ->where('is_active', true)
                 ->firstOrFail();
             if ($category) {
                 $categoryId = $category->id;
@@ -31,11 +31,11 @@ class FilterController extends Controller
         $minPrice = $query->min('price');
         $maxPrice = $query->max('price');
 
-        $flowerTypes = FlowerType::where('show_in_filters', 1)->whereHas('flowers.products', function ($query) use ($categoryId) {
+        $flowerTypes = FlowerType::where('show_in_filters', true)->whereHas('flowers.products', function ($query) use ($categoryId) {
             if ($categoryId !== null) {
-                $query->where('products.is_active', 1)->where('products.category_id', $categoryId);
+                $query->where('products.is_active', true)->where('products.category_id', $categoryId);
             } else {
-                $query->where('products.is_active', 1);
+                $query->where('products.is_active', true);
             }
         })->select('id', 'name')->get();
 

@@ -32,6 +32,11 @@
                     {{ isEnterPhoneLoading ? 'Набираем номер...' : 'Получить код в звонке' }}
                 </button>
 
+                <p class="text-xs mt-4">
+                    Продолжая, вы соглашаетесь c
+                    <router-link to="agreement" class="font-bold hover:border-b hover:border-black">пользовательским соглашением</router-link>
+                    и <router-link to="privacy" class="font-bold hover:border-b hover:border-black">политикой обработки персональных данных</router-link>.
+                </p>
             </div>
             <div v-if="showEnterCodeDialog">
                 <h4 class="text-lg font-medium mb-4">Подтвердите номер</h4>

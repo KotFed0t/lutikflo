@@ -36,7 +36,7 @@ class OrderService
     private function validateCart(array $cart): array
     {
         $invalidProductsId = [];
-        $inactiveProductsId = $this->products->where('is_active', 0)->pluck('id');
+        $inactiveProductsId = $this->products->where('is_active', false)->pluck('id');
         if ($inactiveProductsId->count() > 0) {
             //товары уже не в наличии
             array_push($invalidProductsId, ...$inactiveProductsId);

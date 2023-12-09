@@ -38,7 +38,10 @@ class PackageResource extends Resource
 
 	public function rules(Model $item): array
 	{
-	    return [];
+	    return [
+            'name' => 'required',
+            'price' => 'required'
+        ];
     }
 
     public function search(): array
