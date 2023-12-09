@@ -34,8 +34,8 @@
 
                 <p class="text-xs mt-4">
                     Продолжая, вы соглашаетесь c
-                    <router-link to="agreement" class="font-bold hover:border-b hover:border-black">пользовательским соглашением</router-link>
-                    и <router-link to="privacy" class="font-bold hover:border-b hover:border-black">политикой обработки персональных данных</router-link>.
+                    <router-link to="agreement" @click="hideDialog" class="font-bold hover:border-b hover:border-black">пользовательским соглашением</router-link>
+                    и <router-link to="privacy" @click="hideDialog" class="font-bold hover:border-b hover:border-black">политикой обработки персональных данных</router-link>.
                 </p>
             </div>
             <div v-if="showEnterCodeDialog">
