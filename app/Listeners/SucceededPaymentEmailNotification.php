@@ -25,7 +25,7 @@ class SucceededPaymentEmailNotification
     public function handle(SucceededPaymentCallbackReceived $event): void
     {
         //TODO заменить почту менеджера
-        Mail::to('slayvi555@gmail.com')->send(new SucceededPaymentManagerEmail($event->order));
+        Mail::to('julijasss@mail.ru')->send(new SucceededPaymentManagerEmail($event->order));
 
         Mail::to($event->order->user->email)->send(new SucceededPaymentClientEmail($event->order));
     }

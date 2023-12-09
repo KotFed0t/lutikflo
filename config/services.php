@@ -43,6 +43,11 @@ return [
     'yookassa' => [
         'apiKey' => env('YOOKASSA_API_KEY'),
         'shopId' => env('YOOKASSA_SHOP_ID')
+    ],
+
+    'telegram' => [
+        'botApiToken' => env('TELEGRAM_BOT_API_TOKEN'),
+        'chatId' => env('TELEGRAM_CHAT_ID')
     ]
 
 ];

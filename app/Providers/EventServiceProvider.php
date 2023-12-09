@@ -9,6 +9,7 @@ use App\Listeners\CanceledPaymentEmailNotification;
 use App\Listeners\OrderStatusUpdatedEmailNotification;
 use App\Listeners\SucceededPaymentEmailNotification;
 use App\Listeners\SucceededPaymentVoiceNotification;
+use App\Listeners\SucceededPaymmentTelegramNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -24,7 +25,8 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         SucceededPaymentCallbackReceived::class => [
             SucceededPaymentEmailNotification::class,
-            SucceededPaymentVoiceNotification::class
+            SucceededPaymmentTelegramNotification::class,
+//            SucceededPaymentVoiceNotification::class,
         ],
         CanceledPaymentCallbackReceived::class => [
             CanceledPaymentEmailNotification::class

@@ -26,7 +26,7 @@ class VoicePasswordService
             return $response;
         }
 
-        Log::error('error while calling voice passwrod', $response->json());
+        Log::error('error while calling voice password', $response->json());
         return null;
     }
 

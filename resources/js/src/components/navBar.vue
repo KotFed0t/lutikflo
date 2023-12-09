@@ -35,7 +35,7 @@
         </div>
     </transition>
 
-    <LoginDialog v-model:show="loginDialogVisible" @loggedIn="closeMenuModal()"></LoginDialog>
+    <LoginDialog v-model:show="loginDialogVisible" @loggedIn="closeMenuModal()" @closeMenuModal="closeMenuModal()"></LoginDialog>
     <div class="flex justify-between py-5 mb-5">
         <div class="font-bold text-2xl">
             <router-link :to="{name: 'home'}">LUTIKFLO</router-link>
