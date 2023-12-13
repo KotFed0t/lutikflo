@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\PaymentInterface;
 use App\Enums\OrderStatusesEnum;
 use App\Exceptions\CartValidationException;
 use App\Http\Controllers\Controller;
@@ -46,7 +47,7 @@ class OrderController extends Controller
         return response()->json(['error_message' => 'Заказ не найден'], 404);
     }
 
-    public function createOrder(OrderCreateRequest $request, TomTomApiService $tomTomApiService, YookassaService $yookassaService)
+    public function createOrder(OrderCreateRequest $request, TomTomApiService $tomTomApiService, PaymentInterface $paymentInterface)
     {
         $cartData = $request->validated()['cart'];
         $formData = $request->validated()['form_data'];
@@ -107,7 +108,7 @@ class OrderController extends Controller
             $user->save();
 
             $order = $orderService->createOrder($orderData, $formData, $user->id);
-            $paymentUrl = $yookassaService->createPayment($orderData, $order, $user);
+            $paymentData = $paymentInterface->createPayment($orderData, $order, $user);
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
@@ -118,6 +119,6 @@ class OrderController extends Controller
             ], 500);
         }
 
-        return response()->json(['payment_url' => $paymentUrl]);
+        return response()->json(['data' => $paymentData]);
     }
 }

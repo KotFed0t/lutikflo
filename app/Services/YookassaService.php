@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\PaymentInterface;
 use App\Enums\OrderStatusesEnum;
 use App\Events\CanceledPaymentCallbackReceived;
 use App\Events\SucceededPaymentCallbackReceived;
@@ -26,25 +27,13 @@ use YooKassa\Common\Exceptions\UnauthorizedException;
 use YooKassa\Model\Notification\NotificationEventType;
 use YooKassa\Model\Notification\NotificationFactory;
 
-class YookassaService
+class YookassaService extends PaymentService implements PaymentInterface
 {
-    private const PENDING = 'PENDING';
-    private const SUCCEEDED = 'SUCCEEDED';
-    private const CANCELED = 'CANCELED';
-
     private function getClient(): Client
     {
         $client = new Client();
         $client->setAuth(config('services.yookassa.shopId'), config('services.yookassa.apiKey'));
         return $client;
-    }
-
-    private function createTransaction(int $orderId)
-    {
-        return Transaction::query()->create([
-            'order_id' => $orderId,
-            'status' => self::PENDING
-        ]);
     }
 
     /**
@@ -60,7 +49,7 @@ class YookassaService
      * @throws ApiConnectionException
      * @throws UnauthorizedException
      */
-    public function createPayment(array $orderData, Order $order, User $user): string
+    public function createPayment(array $orderData, Order $order, User $user): array
     {
         Log::info('start creating payment', ['orderData' => $orderData, 'user' => $user]);
         $client = $this->getClient();
@@ -93,7 +82,7 @@ class YookassaService
             $idempotenceKey
         );
         Log::info('payment created successfully', ['yookassaResponse' => $response]);
-        return $response->getConfirmation()->getConfirmationUrl();
+        return ['service' => 'yookassa', 'payment_url' => $response->getConfirmation()->getConfirmationUrl()];
     }
 
     public function handleCallback(Request $request): void

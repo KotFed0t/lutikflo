@@ -18,7 +18,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'image' => fake()->image(),
+            'image' => 'img/path',
             'product_id' => rand(1, 30),
             'order' => fake()->randomDigit()
         ];

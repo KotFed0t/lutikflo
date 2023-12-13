@@ -525,6 +525,7 @@ export default {
                 this.isLoading = true
                 axios.post('api/orders', {cart: this.cart, form_data: form_data}).then(response => {
                     this.isLoading = false
+                    console.log(response)
                     if (response.data.payment_url) {
                         this.$store.dispatch('clearCart')
                         window.location.href = response.data.payment_url

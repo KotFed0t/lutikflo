@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryWithProductsResource;
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -31,8 +32,11 @@ class CategoryController extends Controller
         );
     }
 
-    public function getCategory(Category $category): CategoryResource
+    public function getCategory(Category $category): CategoryResource|JsonResponse
     {
-        return new CategoryResource($category);
+        if ($category->is_active) {
+            return new CategoryResource($category);
+        }
+        return response()->json(['error' => 'Not Found'], 404);
     }
 }

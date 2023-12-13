@@ -23,9 +23,9 @@ class ProductFactory extends Factory
             'category_id' => rand(1, 7),
             'price' => rand(500, 5000),
             'is_active' => fake()->boolean(),
-            'description' => fake()->text(),
-            'main_img' => fake()->image(),
-            'order' => fake()->randomDigit()
+            'description' => 'lorem Ipsum daksd nasjnd kasnd kajksnd nasdnkmd d memd mekm d.',
+            'main_img' => 'img/path',
+            'order' => rand(1, 20)
         ];
     }
 }
