@@ -5,6 +5,7 @@ namespace App\MoonShine\Resources;
 use App\Enums\OrderStatusesEnum;
 use App\Events\OrderStatusUpdated;
 use App\Models\User;
+use App\MoonShine\CustomFields\EnumCustom;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
@@ -61,9 +62,9 @@ class OrderResource extends Resource
 //            Text::make('recipient_name', 'recipient_name')->hideOnForm(),
 //            Phone::make('recipient_phone', 'recipient_phone')->hideOnForm(),
             Text::make('адрес доставки', 'delivery_address', fn($order) => $order->delivery_address ?? '-')->hideOnForm(),
-            Text::make('подъезд', 'entrance', fn($order) => $order->entrance ?? '-')->hideOnForm(),
-            Text::make('этаж', 'floor', fn($order) => $order->floor ?? '-')->hideOnForm(),
-            Text::make('квартира', 'apartment_number', fn($order) => $order->apartment_number ?? '-')->hideOnForm(),
+            Text::make('подъезд', 'entrance', fn($order) => $order->entrance ?? '-')->hideOnForm()->hideOnIndex(),
+            Text::make('этаж', 'floor', fn($order) => $order->floor ?? '-')->hideOnForm()->hideOnIndex(),
+            Text::make('квартира', 'apartment_number', fn($order) => $order->apartment_number ?? '-')->hideOnForm()->hideOnIndex(),
             Text::make('комментарий для курьера', 'comment_for_courier', fn($order) => $order->comment_for_courier ?? '-')
                 ->hideOnIndex()
                 ->hideOnForm(),
@@ -82,9 +83,8 @@ class OrderResource extends Resource
                     'CANCELED' => 'Отменено',
                 };
             })->badge('purple')->hideOnForm(),
-            Enum::make('статус заказа', 'status')->attach(OrderStatusesEnum::class)
-                ->sortable()
-                ->hint("CREATED - создан; PAID - оплачен; IN_PROCESSING - в обработке; IN_DELIVERY - передан в доставку; DELIVERED - доставлен; CANCELED - Платеж отменен; REFUND - Произведен возврат денежных средств клиенту"),
+            EnumCustom::make('статус заказа', 'status')->attach(OrderStatusesEnum::class)
+                ->sortable(),
             Date::make('заказ создан', 'created_at')->hideOnForm()->sortable(),
             NoInput::make('Состав заказа', '', fn(Order $order) => view('moonshine.order', compact('order'))->render())
                 ->hideOnIndex()
@@ -94,11 +94,11 @@ class OrderResource extends Resource
         ];
     }
 
-//    public function query(): Builder
-//    {
+    public function query(): Builder
+    {
         //все заказы кроме статуса created
-//        return parent::query()->where('status', '>', 1);
-//    }
+        return parent::query()->where('status', '>', 1);
+    }
 
     protected function afterUpdated(Model $item): void
     {

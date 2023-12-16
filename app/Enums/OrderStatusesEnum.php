@@ -21,13 +21,24 @@ enum OrderStatusesEnum: int
             self::IN_DELIVERY => 'Передан в доставку',
             self::DELIVERED => 'Доставлен',
             self::CANCELLED => 'Платеж отменен',
-            self::REFUND => 'Произведен возврат денежных средств клиенту'
+            self::REFUND => 'Произведен возврат денежных средств'
         };
     }
 
     public static function valuesWithDescription(): array
     {
         return array_reduce(self::cases(), function ($result, OrderStatusesEnum $item) {
+            $result[$item->value] = $item->description();
+            return $result;
+        }, []);
+    }
+
+    public static function valuesWithDescriptionForAdmin(): array
+    {
+        return array_reduce(self::cases(), function ($result, OrderStatusesEnum $item) {
+            if ($item->value === 1 || $item->value === 2) {
+                return $result;
+            }
             $result[$item->value] = $item->description();
             return $result;
         }, []);

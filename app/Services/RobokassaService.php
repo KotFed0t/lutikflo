@@ -81,7 +81,7 @@ class RobokassaService extends PaymentService implements PaymentInterface
 //                'rrn' => $responseObject->getAuthorizationDetails()->getRrn()
             ]);
             event(new SucceededPaymentCallbackReceived($order));
-
+            Log::info('robokassa payment callback successfully handled', ['order_id' => $inv_id, 'location' => 'RobokassaService->handleCallback']);
             return "OK$inv_id";
         } catch (Exception $e) {
             Log::error($e->getMessage(), ['location' => 'RobokassaService->handleCallback', 'data' => $request->all()]);
