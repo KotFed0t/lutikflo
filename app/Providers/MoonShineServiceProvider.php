@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\DeliveryPriceSetting;
+use App\Models\Order;
 use App\MoonShine\Resources\CategoryResource;
 use App\MoonShine\Resources\DeliveryPriceSettingResource;
 use App\MoonShine\Resources\FlowerResource;
@@ -39,7 +40,7 @@ class MoonShineServiceProvider extends ServiceProvider
             MenuItem::make('Товары', new ProductResource())->icon('heroicons.outline.building-storefront'),
 
 
-            MenuItem::make('Заказы', new OrderResource())->icon('heroicons.shopping-bag'),
+            MenuItem::make('Заказы', new OrderResource())->icon('heroicons.shopping-bag')->badge(fn() => Order::query()->where('status', 2)->count()),
 
             MenuGroup::make('Цветы', [
                 MenuItem::make('Упаковки', new PackageResource())->icon('heroicons.gift'),

@@ -6,7 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <title>lutik-flo</title>
+    <meta name="description" content="Цветочная лавка Lutik.flo свежие цветы с заботой о вас." />
+    <title>Цветочная лавка Lutik.flo</title>
     @vite('resources/css/app.css')
 </head>
 <body>

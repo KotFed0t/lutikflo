@@ -11,6 +11,7 @@ class EnumCustom extends Enum
 {
     public function indexViewValue(Model $item, bool $container = true): string
     {
+        //вывод названия. Ищем description по id
         $value = $item->{$this->field()};
         $enumValuesWithDescription = OrderStatusesEnum::valuesWithDescription();
         if (isset($enumValuesWithDescription[$value?->value])) {
@@ -22,7 +23,7 @@ class EnumCustom extends Enum
     public function attach(string $class): static
     {
         /* @var UnitEnum $class ; */
-//        dd($class::valuesWithDescriptionForAdmin());
+        //опции для селекта. Все статусы кроме 1 и 2
         $this->options($class::valuesWithDescriptionForAdmin());
 
         return $this;
