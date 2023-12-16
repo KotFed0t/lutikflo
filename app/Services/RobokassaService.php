@@ -59,9 +59,9 @@ class RobokassaService extends PaymentService implements PaymentInterface
             $mrh_pass2 = config('services.robokassa.pswd_2');   // merchant pass2 here
 
             // HTTP parameters:
-            $out_summ = $request->get["OutSum"];
-            $inv_id = $request->get["InvId"];
-            $crc = strtoupper($request->get["SignatureValue"]);
+            $out_summ = $request->get("OutSum");
+            $inv_id = $request->get("InvId");
+            $crc = strtoupper($request->get("SignatureValue"));
 
             // build own CRC
             $my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass2"));

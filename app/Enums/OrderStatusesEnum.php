@@ -15,7 +15,7 @@ enum OrderStatusesEnum: int
     public function description(): string
     {
         return match ($this) {
-            self::CREATED => 'Создан',
+            self::CREATED => 'Создан, но не оплачен',
             self::PAID => 'Оплачен',
             self::IN_PROCESSING => 'В обработке',
             self::IN_DELIVERY => 'Передан в доставку',
