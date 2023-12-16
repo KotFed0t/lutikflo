@@ -264,6 +264,18 @@
     </div>
 
 
+    <form ref="robokassaForm" action="https://auth.robokassa.ru/Merchant/Index.aspx" method="POST">
+        <input type="hidden" name="MerchantLogin" :value="robokassa.mrchLogin">
+        <input type="hidden" name="OutSum" :value="robokassa.outSum">
+        <input type="hidden" name="InvId" :value="robokassa.invId">
+        <input type="hidden" name="Description" :value="robokassa.invDescription">
+        <input type="hidden" name="SignatureValue" :value="robokassa.signatureValue">
+        <input type="hidden" name="Receipt" :value="robokassa.receipt">
+        <input type="hidden" name="Email" :value="robokassa.email">
+<!--        <input type="hidden" name="ExpirationDate" :value="robokassa.expirationDate">-->
+    </form>
+
+
 </template>
 
 <script>
@@ -309,7 +321,17 @@ export default {
             errorsBackend: {},
             emailWarning: false,
             totalPrice: undefined,
-            isLoading: false
+            isLoading: false,
+            robokassa: {
+                mrchLogin: undefined,
+                outSum: undefined,
+                invId: undefined,
+                invDescription: undefined,
+                signatureValue: undefined,
+                receipt: undefined,
+                expirationDate: undefined,
+                email: undefined
+            }
         }
     },
     mounted() {
@@ -526,10 +548,27 @@ export default {
                 axios.post('api/orders', {cart: this.cart, form_data: form_data}).then(response => {
                     this.isLoading = false
                     console.log(response)
-                    if (response.data.payment_url) {
+                    if (response.data.data.payment_url && response.data.data.service === 'yookassa') {
                         this.$store.dispatch('clearCart')
-                        window.location.href = response.data.payment_url
+                        window.location.href = response.data.data.payment_url
                     }
+
+                    if (response.data.data.service === 'robokassa') {
+                        this.robokassa.invDescription = response.data.data.payment_data.inv_desc
+                        this.robokassa.invId = response.data.data.payment_data.inv_id
+                        this.robokassa.mrchLogin = response.data.data.payment_data.mrh_login
+                        this.robokassa.outSum = response.data.data.payment_data.out_sum
+                        this.robokassa.receipt = response.data.data.payment_data.receipt
+                        this.robokassa.signatureValue = response.data.data.payment_data.signatureValue
+                        this.robokassa.email = response.data.data.payment_data.email
+                        this.robokassa.expirationDate = response.data.data.payment_data.expirationDate
+                        this.$nextTick(() => {
+                            // Вызываем submit() после завершения обновлений
+                            this.$store.dispatch('clearCart')
+                            this.$refs.robokassaForm.submit();
+                        });
+                    }
+
                 }).catch(err => {
                     this.isLoading = false
                     console.log(err)

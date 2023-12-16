@@ -45,6 +45,12 @@ return [
         'shopId' => env('YOOKASSA_SHOP_ID')
     ],
 
+    'robokassa' => [
+        'shop_id' => env('ROBOKASSA_SHOP_ID'),
+        'pswd_1' => env('ROBOKASSA_PSWD_1'),
+        'pswd_2' => env('ROBOKASSA_PSWD_2')
+    ],
+
     'telegram' => [
         'botApiToken' => env('TELEGRAM_BOT_API_TOKEN'),
         'chatId' => env('TELEGRAM_CHAT_ID')

@@ -73,6 +73,7 @@ class OrderService
         $orderPrice = 0;
         $productsWithPrice = [];
         $yookassaItems = [];
+        $robokassaItems = [];
         foreach ($this->cart as $cartItem) {
             $product = $this->products->where('id', $cartItem['product_id'])->first();
             if (!empty($cartItem['flower_count'])) {
@@ -98,6 +99,15 @@ class OrderService
                     ],
                     'vat_code' => '2',
                 ];
+
+                $robokassaItems[] = [
+                    'name' => $product->name . ' (' . $cartItem['flower_count'] . ' шт.)',
+                    'quantity' => $cartItem['count'],
+                    'cost' => $priceByProduct,
+                    'sum' => $priceByCount,
+                    'payment_method' => 'full_payment',
+                    'tax' => 'none'
+                ];
             } else {
                 $priceByCount = $product->price * $cartItem['count'];
                 $orderPrice += $priceByCount;
@@ -118,6 +128,15 @@ class OrderService
                     ],
                     'vat_code' => '2',
                 ];
+
+                $robokassaItems[] = [
+                    'name' => $product->name,
+                    'quantity' => $cartItem['count'],
+                    'cost' => $product->price,
+                    'sum' => $priceByCount,
+                    'payment_method' => 'full_payment',
+                    'tax' => 'none'
+                ];
             }
         }
         $yookassaItems[] = [
@@ -130,11 +149,21 @@ class OrderService
             'vat_code' => '2',
         ];
 
+        $robokassaItems[] = [
+            'name' => 'Цена доставки',
+            'quantity' => 1,
+            'sum' => $deliveryPrice,
+            'payment_method' => 'full_payment',
+            'tax' => 'none'
+        ];
+
         return [
             'orderPrice' => $orderPrice,
             'deliveryPrice' => $deliveryPrice,
             'productsWithPrice' => $productsWithPrice,
-            'yookassaItems' => $yookassaItems
+            'yookassaItems' => $yookassaItems,
+            'robokassaItems'=>  $robokassaItems
+
         ];
     }
 

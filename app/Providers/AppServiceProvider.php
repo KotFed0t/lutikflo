@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\PaymentInterface;
+use App\Services\RobokassaService;
 use App\Services\YookassaService;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(PaymentInterface::class, YookassaService::class);
+        $this->app->bind(PaymentInterface::class, RobokassaService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

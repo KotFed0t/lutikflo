@@ -69,6 +69,6 @@ Route::middleware('auth:sanctum')->get('orders/{id}', [OrderController::class, '
 //провалидировать корзину и получить всю инфу по корзине. Принимает в параметрах {cart}
 Route::post('cart', [CartController::class, 'getCartData']);
 
-//обработка callback от yookassa
+//обработка callback от yookassa или robokassa
 Route::post('payment/callback', [PaymentController::class, 'handleCallback']);
 

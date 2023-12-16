@@ -85,7 +85,7 @@ class YookassaService extends PaymentService implements PaymentInterface
         return ['service' => 'yookassa', 'payment_url' => $response->getConfirmation()->getConfirmationUrl()];
     }
 
-    public function handleCallback(Request $request): void
+    public function handleCallback(Request $request): string
     {
         try {
             $data = $request->json()->all();
@@ -99,7 +99,7 @@ class YookassaService extends PaymentService implements PaymentInterface
 
             if (!$client->isNotificationIPTrusted($request->ip())) {
                 Log::error('ip is not trusted', ['ip' => $request->ip(), 'location' => 'YookassaService->handleCallback']);
-                return;
+                return 'ERROR';
             }
 
             if ($notificationObject->getEvent() === NotificationEventType::PAYMENT_SUCCEEDED) {
@@ -128,11 +128,13 @@ class YookassaService extends PaymentService implements PaymentInterface
                 event(new CanceledPaymentCallbackReceived($order));
             } else {
                 Log::error('payment status not in (succeeded, canceled)', ['location' => 'YookassaService->handleCallback']);
-                return;
+                return 'ERROR';
             }
             Log::info('payment callback successfully handled', ['order_id' => $responseObject->getMetadata()['order_id'], 'location' => 'YookassaService->handleCallback']);
+            return 'OK';
         } catch (Exception $e) {
             Log::error($e->getMessage(), ['location' => 'YookassaService->handleCallback', 'data' => $data ?? '']);
+            return 'ERROR';
         }
     }
 }
