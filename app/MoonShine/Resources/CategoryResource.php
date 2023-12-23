@@ -33,8 +33,8 @@ class CategoryResource extends Resource
 	{
 		return [
 		    ID::make()->sortable(),
-            Text::make('Имя', 'name'),
-            Slug::make('slug', 'slug'),
+            Text::make('Имя', 'name')->required(),
+            Slug::make('slug', 'slug')->required()->unique(),
             SwitchBoolean::make('Активна', 'is_active')->autoUpdate(false),
             Number::make('Порядок вывода', 'order'),
             HasMany::make('Товары', 'products')

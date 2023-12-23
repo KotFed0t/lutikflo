@@ -2,6 +2,13 @@
     <h5 class="font-medium mb-2">Категории</h5>
     <div class="flex flex-wrap mb-5">
         <router-link
+            :to="{name: 'catalog'}"
+            class="text-sm font-medium rounded p-1.5 px-2 mr-3 mb-2 hover:shadow-inner hover:bg-neutral-300 transition-all duration-300 sm:text-base"
+            :class="$route.name === 'catalog' && !$route.params.categorySlug ? 'bg-neutral-300 shadow-inner' : 'bg-neutral-100 shadow-lg'"
+        >
+            Весь каталог
+        </router-link>
+        <router-link
             v-for="category in categories"
             :key="category.id"
             class="text-sm font-medium rounded p-1.5 px-2 mr-3 mb-2 hover:shadow-inner hover:bg-neutral-300 transition-all duration-300 sm:text-base"

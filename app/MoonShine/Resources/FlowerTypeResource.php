@@ -30,7 +30,7 @@ class FlowerTypeResource extends Resource
 	{
 		return [
 		    ID::make()->sortable(),
-            Text::make('название', 'name'),
+            Text::make('название', 'name')->required(),
             SwitchBoolean::make('показывать в фильтрах', 'show_in_filters')->autoUpdate(false),
         ];
 	}

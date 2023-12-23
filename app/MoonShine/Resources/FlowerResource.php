@@ -26,9 +26,9 @@ class FlowerResource extends Resource
 	{
 		return [
 		    ID::make()->sortable(),
-            Text::make('название', 'name'),
-            Number::make('цена', 'price'),
-            BelongsTo::make('тип цветка', 'type', 'name')
+            Text::make('название', 'name')->required(),
+            Number::make('цена', 'price')->required(),
+            BelongsTo::make('тип цветка', 'type', 'name')->required()
         ];
 	}
 

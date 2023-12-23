@@ -31,8 +31,8 @@ class PackageResource extends Resource
 	{
 		return [
 		    ID::make()->sortable(),
-            Text::make('название', 'name'),
-            Number::make('цена', 'price'),
+            Text::make('название', 'name')->required(),
+            Number::make('цена', 'price')->required(),
         ];
 	}
 

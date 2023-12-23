@@ -5,8 +5,8 @@
             v-for="flowerType in flowerTypes"
             :key="flowerType.id"
             @click="selectFlowerType(flowerType.id)"
-            class="text-sm rounded-full font-medium p-1.5 px-3 mr-3 mb-2 hover:shadow-lg transition-all duration-300 sm:text-base"
-            :class="selectedFlowerTypes.includes(flowerType.id) ? 'bg-neutral-400 shadow-lg' : 'bg-neutral-100'"
+            class="text-sm rounded-full font-medium p-1.5 px-3 mr-3 mb-2 drop-shadow-lg hover:drop-shadow-none hover:bg-neutral-300 transition-all duration-300 sm:text-base"
+            :class="selectedFlowerTypes.includes(flowerType.id) ? 'bg-neutral-300 drop-shadow-none' : 'bg-neutral-100'"
         >
             {{ flowerType.name }}
         </button>
@@ -14,9 +14,9 @@
     <h5 class="font-medium mb-2">Цена</h5>
     <div class="mb-6 sm:flex sm:items-center">
         <input type="number" v-model="price_from" :placeholder="' от '+minPrice"
-               class="w-28 px-2 border border-neutral-300 border-2 rounded-lg mr-2 focus:outline-none focus:border-neutral-400">
+               class="w-28 px-2 border border-neutral-300 border rounded-lg mr-2 focus:outline-none focus:border-neutral-400">
         <input type="number" v-model="price_to" :placeholder="' до '+maxPrice"
-               class="w-28 px-2 border border-neutral-300 border-2 rounded-lg focus:outline-none focus:border-neutral-400">
+               class="w-28 px-2 border border-neutral-300 border rounded-lg focus:outline-none focus:border-neutral-400">
 
         <div class="mt-4 text-sm sm:mt-0 sm:ml-4 sm:text-base">
             <button v-if="selectedFlowerTypes.length !== 0 || price_from || price_to || !isQueryParamsEmpty" @click="pushToCatalogWithParams"
