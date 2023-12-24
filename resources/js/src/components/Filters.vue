@@ -5,7 +5,7 @@
             v-for="flowerType in flowerTypes"
             :key="flowerType.id"
             @click="selectFlowerType(flowerType.id)"
-            class="text-sm rounded-full font-medium p-1.5 px-3 mr-3 mb-2 drop-shadow-lg hover:drop-shadow-none hover:bg-neutral-300 transition-all duration-300 sm:text-base"
+            class="text-sm rounded-full font-medium p-1.5 px-3 mr-3 mb-2 drop-shadow-lg transition-all duration-300 sm:text-base"
             :class="selectedFlowerTypes.includes(flowerType.id) ? 'bg-neutral-300 drop-shadow-none' : 'bg-neutral-100'"
         >
             {{ flowerType.name }}
